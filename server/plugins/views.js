@@ -36,8 +36,8 @@ module.exports = {
     context: {
       appVersion: pkg.version,
       assetPath: '/assets',
-      serviceName: 'Service name',
-      pageTitle: 'Service name - GOV.UK',
+      serviceName: 'Mine Support',
+      pageTitle: 'Mine Support - GOV.UK',
       analyticsAccount: analyticsAccount
     }
   }
