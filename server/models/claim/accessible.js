@@ -5,7 +5,7 @@ function ViewModel (accessible, error) {
     name: 'accessible',
     fieldset: {
       legend: {
-        text: 'Is the property accessible?',
+        text: 'Is the property still accessible?',
         isPageHeading: true,
         classes: 'govuk-fieldset__legend--xl'
       }

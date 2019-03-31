@@ -8,7 +8,8 @@ const schema = {
   redisHost: joi.string().default('localhost'),
   redisPort: joi.number().default(6379),
   cookiePassword: joi.string().required(),
-  sessionTimeoutMinutes: joi.number().default(30)
+  sessionTimeoutMinutes: joi.number().default(30),
+  apiGateway: joi.string().uri().default('localhost:3001')
 }
 
 // Build config
@@ -19,7 +20,8 @@ const config = {
   redisHost: process.env.REDIS_HOSTNAME,
   redisPort: process.env.REDIS_PORT,
   cookiePassword: process.env.COOKIE_PASSWORD,
-  sessionTimeoutMinutes: process.env.MINE_SUPPORT_SESSION_TIMEOUT_IN_MINUTES
+  sessionTimeoutMinutes: process.env.MINE_SUPPORT_SESSION_TIMEOUT_IN_MINUTES,
+  apiGateway: process.env.MINE_SUPPORT_API_GATEWAY
 }
 
 // Validate config

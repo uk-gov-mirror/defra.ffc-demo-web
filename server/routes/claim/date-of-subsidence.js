@@ -1,6 +1,7 @@
 const ViewModel = require('../../models/claim/date-of-subsidence')
 const schema = require('../../schemas/claim/date-of-subsidence')
 const sessionHandler = require('../../services/session-handler')
+const dateUtil = require('../../../util/date-util')
 
 module.exports = [{
   method: 'GET',
@@ -18,11 +19,18 @@ module.exports = [{
   options: {
     validate: { payload: schema,
       failAction: async (request, h, error) => {
-        return h.view('claim/date-of-subsidence', new ViewModel(request.payload.dateOfSubsidence, error)).takeover()
+        let dateOfSubsidence = dateUtil.buildDate(request.payload.year, request.payload.month, request.payload.day, false)
+        return h.view('claim/date-of-subsidence', new ViewModel(dateOfSubsidence, error)).takeover()
       }
     },
     handler: async (request, h) => {
-      sessionHandler.update(request, 'claim', request.payload)
+      let dateOfSubsidence
+      try {
+        dateOfSubsidence = dateUtil.buildDate(request.payload.year, request.payload.month, request.payload.day, true)
+      } catch (err) {
+        return this.failAction(request, h, err)
+      }
+      sessionHandler.update(request, 'claim', { dateOfSubsidence: dateOfSubsidence })
       return h.redirect('./mine-type')
     }
   }
