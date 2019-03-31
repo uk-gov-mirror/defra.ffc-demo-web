@@ -1,6 +1,7 @@
 const ViewModel = require('../../models/claim/email')
 const schema = require('../../schemas/claim/email')
 const sessionHandler = require('../../services/session-handler')
+const apiGateway = require('../../services/api-gateway')
 
 module.exports = [{
   method: 'GET',
@@ -23,6 +24,10 @@ module.exports = [{
     },
     handler: async (request, h) => {
       sessionHandler.update(request, 'claim', request.payload)
+      let submitted = await apiGateway.submit(request)
+      if (!submitted) {
+        return h.view('service-unavailable')
+      }
       return h.redirect('./confirmation')
     }
   }

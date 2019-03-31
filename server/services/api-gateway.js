@@ -1,0 +1,19 @@
+const config = require('../config')
+const restClient = require('./rest-client')
+const _ = require('lodash')
+const sessionHandler = require('./session-handler')
+
+module.exports = {
+  submit: async (request) => {
+    try {
+      let claim = sessionHandler.get(request, 'claim')
+      await restClient.postJson(`${config.apiGateway}/claim`, { payload: claim })
+      return true
+    } catch (err) {
+      if (err.isBoom && _.get(err, 'output.statusCode') !== 503) {
+        throw err
+      }
+      return false
+    }
+  }
+}
