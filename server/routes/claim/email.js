@@ -23,6 +23,7 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
+      request.payload.claimId = 'MINE123'
       sessionHandler.update(request, 'claim', request.payload)
       let submitted = await apiGateway.submit(request)
       if (!submitted) {
