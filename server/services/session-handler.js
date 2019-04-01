@@ -15,7 +15,10 @@ module.exports = {
   },
   update: function (request, key, object) {
     let existing = this.get(request, key)
-    hoek.merge(existing, object)
+    hoek.merge(existing, object, true, false)
     this.set(request, key, existing)
+  },
+  clear: function (request, key) {
+    request.yar.clear(key)
   }
 }

@@ -23,11 +23,17 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
-      request.payload.claimId = 'MINE123'
-      sessionHandler.update(request, 'claim', request.payload)
-      let submitted = await apiGateway.submit(request)
-      if (!submitted) {
-        return h.view('service-unavailable')
+      let claim = sessionHandler.get(request, 'claim')
+
+      if (!claim.submitted) {
+        request.payload.claimId = 'MINE123'
+        sessionHandler.update(request, 'claim', request.payload)
+        let submitted = await apiGateway.submit(request)
+        if (!submitted) {
+          return h.view('service-unavailable')
+        }
+        request.payload.submitted = true
+        sessionHandler.update(request, 'claim', request.payload)
       }
       return h.redirect('./confirmation')
     }
