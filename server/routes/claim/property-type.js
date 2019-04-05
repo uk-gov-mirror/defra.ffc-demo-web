@@ -7,7 +7,7 @@ module.exports = [{
   path: '/claim/property-type',
   options: {
     handler: (request, h) => {
-      let claim = sessionHandler.get(request, 'claim')
+      const claim = sessionHandler.get(request, 'claim')
       return h.view('claim/property-type', new ViewModel(claim.propertyType, null))
     }
   }

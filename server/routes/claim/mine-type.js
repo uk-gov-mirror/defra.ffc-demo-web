@@ -7,7 +7,7 @@ module.exports = [{
   path: '/claim/mine-type',
   options: {
     handler: (request, h) => {
-      let claim = sessionHandler.get(request, 'claim')
+      const claim = sessionHandler.get(request, 'claim')
       return h.view('claim/mine-type', new ViewModel(claim.mineType, null))
     }
   }

@@ -23,12 +23,12 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
-      let claim = sessionHandler.get(request, 'claim')
+      const claim = sessionHandler.get(request, 'claim')
 
       if (!claim.submitted) {
         request.payload.claimId = 'MINE123'
         sessionHandler.update(request, 'claim', request.payload)
-        let submitted = await apiGateway.submit(request)
+        const submitted = await apiGateway.submit(request)
         if (!submitted) {
           return h.view('service-unavailable')
         }

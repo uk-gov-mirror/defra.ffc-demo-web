@@ -7,7 +7,7 @@ module.exports = [{
   path: '/claim/accessible',
   options: {
     handler: (request, h) => {
-      let claim = sessionHandler.get(request, 'claim')
+      const claim = sessionHandler.get(request, 'claim')
       return h.view('claim/accessible', new ViewModel(claim.accessible, null))
     }
   }

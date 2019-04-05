@@ -8,7 +8,7 @@ module.exports = [{
   path: '/claim/date-of-subsidence',
   options: {
     handler: (request, h) => {
-      let claim = sessionHandler.get(request, 'claim')
+      const claim = sessionHandler.get(request, 'claim')
       return h.view('claim/date-of-subsidence', new ViewModel(claim.dateOfSubsidence, null))
     }
   }
@@ -19,7 +19,7 @@ module.exports = [{
   options: {
     validate: { payload: schema,
       failAction: async (request, h, error) => {
-        let dateOfSubsidence = dateUtil.buildDate(request.payload.year, request.payload.month, request.payload.day, false)
+        const dateOfSubsidence = dateUtil.buildDate(request.payload.year, request.payload.month, request.payload.day, false)
         return h.view('claim/date-of-subsidence', new ViewModel(dateOfSubsidence, error)).takeover()
       }
     },
