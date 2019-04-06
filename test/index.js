@@ -22,10 +22,10 @@ lab.experiment('Web test', () => {
     Code.expect(response.headers['content-type']).to.include('text/html')
   })
 
-  lab.test('GET /about route works', async () => {
+  lab.test('GET /property-type route works', async () => {
     const options = {
       method: 'GET',
-      url: '/about'
+      url: '/claim/property-type'
     }
 
     const response = await server.inject(options)
