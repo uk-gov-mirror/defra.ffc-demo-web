@@ -25,6 +25,7 @@ module.exports = [{
     handler: async (request, h) => {
       const claim = sessionHandler.get(request, 'claim')
 
+      // TODO refactor to safely handle clearing of cache when no longer needed and add generation logic for unique Id
       if (!claim.submitted) {
         request.payload.claimId = 'MINE123'
         sessionHandler.update(request, 'claim', request.payload)
