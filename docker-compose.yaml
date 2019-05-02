@@ -1,0 +1,19 @@
+version: '3'
+services:
+  mine-support-redis:
+    image: redis
+    container_name: mine-support-redis
+    ports:
+        - "6379:6379"
+
+  mine-support:
+    build: .
+    image: mine-support
+    container_name: mine-support
+    environment:
+      REDIS_HOSTNAME: mine-support-redis
+      COOKIE_PASSWORD: X9wSjhhiZNXk9dvQO1diJcpDUsfag44I
+    ports:
+        - "3000:3000"
+    depends_on:
+        - mine-support-redis

@@ -20,6 +20,8 @@ async function createServer () {
       provider: {
         constructor: require('catbox-redis'),
         options: {
+          host: config.redisHost,
+          port: config.redisPort,
           partition: 'mine-support'
         }
       }
