@@ -9,6 +9,7 @@ module.exports = {
       await restClient.postJson(`${config.apiGateway}/claim`, { payload: claim })
       return true
     } catch (err) {
+      console.log(err)
       return false
     }
   }
