@@ -12,22 +12,22 @@ spec:
       paths:
       - path: /?(.*)
         backend:
-          serviceName: web
+          serviceName: mine-support
           servicePort: 80
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app.component: web
-  name: web
+    app.component: mine-support
+  name: mine-support
 spec:
   ports:
   - name: http
     port: 80
     targetPort: 3000
   selector:
-    app.component: web
+    app.component: mine-support
 status:
   loadBalancer: {}
 ---
@@ -35,15 +35,15 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app.component: web
-  name: web
+    app.component: mine-support
+  name: mine-support
 spec:
   replicas: 1
   strategy: {}
   template:
     metadata:
       labels:
-        app.component: web
+        app.component: mine-support
     spec:
       containers:      
       - name: mine-support-redis
