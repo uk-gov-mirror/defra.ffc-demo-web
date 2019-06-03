@@ -5,7 +5,7 @@ const schema = {
   port: joi.number().default(3000),
   env: joi.string().valid('development', 'test', 'production').default('development'),
   cacheName: joi.string().default('redisCache'),
-  redisHost: joi.string().default('localhost'),
+  redisHost: joi.string().default('mine-support-redis'),
   redisPort: joi.number().default(6379),
   cookiePassword: joi.string().required(),
   sessionTimeoutMinutes: joi.number().default(30),

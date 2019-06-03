@@ -31,6 +31,7 @@ module.exports = [{
         sessionHandler.update(request, 'claim', request.payload)
         const submitted = await apiGateway.submit(request)
         if (!submitted) {
+          console.log('claim submission failed')
           return h.view('service-unavailable')
         }
         request.payload.submitted = true
