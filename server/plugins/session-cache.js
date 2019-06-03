@@ -3,7 +3,7 @@ module.exports = {
   plugin: require('yar'),
   options: {
     storeBlank: true,
-    maxCookieSize: 0,
+    maxCookieSize: 1,
     cache: {
       cache: config.cacheName,
       expiresIn: config.sessionTimeoutMinutes * 60 * 1000
