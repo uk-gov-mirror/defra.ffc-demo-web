@@ -5,11 +5,11 @@ const schema = {
   port: joi.number().default(3000),
   env: joi.string().valid('development', 'test', 'production').default('development'),
   cacheName: joi.string().default('redisCache'),
-  redisHost: joi.string().default('mine-support-redis'),
+  redisHost: joi.string().default('localhost'),
   redisPort: joi.number().default(6379),
   cookiePassword: joi.string().required(),
   sessionTimeoutMinutes: joi.number().default(30),
-  apiGateway: joi.string().uri().default('http://mine-support-api-gateway:3001'),
+  apiGateway: joi.string().uri().default('http://localhost:3001'),
   restClientTimeoutMillis: joi.number().default(5000)
 }
 
