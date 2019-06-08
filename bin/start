@@ -4,4 +4,4 @@
 # kubectl apply --kustomize .
 
 # Deploy app
-kubectl apply -f kubernetes/
+kubectl apply -f helm/templates/
