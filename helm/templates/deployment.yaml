@@ -56,7 +56,7 @@ spec:
     spec:
       containers:      
       - name: mine-support
-        image: mine-support
+        image: minesupport.azurecr.io/mine-support
         env:                
         - name: NODE_ENV
           value: production
