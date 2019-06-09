@@ -12,6 +12,7 @@ services:
     container_name: mine-support
     environment:
       COOKIE_PASSWORD: X9wSjhhiZNXk9dvQO1diJcpDUsfag44I
+    command: npm run watch:build
     ports:
         - "3000:3000"
     depends_on:
