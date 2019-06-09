@@ -16,4 +16,4 @@ RUN npm install
 COPY . /mine-support
 
 EXPOSE 3000
-CMD node index && /bin/build
+CMD [ "node", "index" ]
