@@ -13,7 +13,8 @@ RUN npm install
 # RUN npm ci --only=production
 
 # Bundle app source
-COPY . /mine-support
+USER node
+COPY --chown=node:node . /mine-support
 
 RUN npm run build
 
