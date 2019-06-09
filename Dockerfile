@@ -13,8 +13,8 @@ RUN npm install
 # RUN npm ci --only=production
 
 # Bundle app source
-COPY . .
 USER node
+COPY --chown=node:node . .
 RUN npm run build
 
 EXPOSE 8080
