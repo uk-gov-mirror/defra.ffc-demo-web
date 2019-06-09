@@ -13,10 +13,7 @@ RUN npm install
 # RUN npm ci --only=production
 
 # Bundle app source
-USER node
-COPY --chown=node:node . /mine-support
-
-RUN npm run build
+COPY . /mine-support
 
 EXPOSE 3000
-CMD [ "node", "index" ]
+CMD node index && /bin/build
