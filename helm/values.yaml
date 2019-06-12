@@ -17,7 +17,7 @@ containers:
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     cookiePassword: ${COOKIE_PASSWORD}
-    apiGateway: http://localhost:3001
+    apiGateway: http://mine-support-api-gateway:3001
     restartPolicy: Always
   redis:
     name: mine-support-redis
