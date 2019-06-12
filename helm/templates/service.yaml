@@ -28,4 +28,4 @@ spec:
   - port: {{ .Values.containers.redis.port }}
     protocol: TCP
   selector:
-    name: {{ .Values.containers.service.name }}
+    name: {{ .Values.containers.redis.name }}

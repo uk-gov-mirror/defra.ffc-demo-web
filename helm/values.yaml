@@ -25,14 +25,6 @@ containers:
     image: redis
     imagePullPolicy: IfNotPresent
     tag: latest
-    requestMemory: 30Mi
-    requestCpu: 10m
-    limitMemory: 60Mi
-    limitCpu: 40m
-    runAsNonRoot: true
-    runAsUser: 1000
-    readOnlyRootFilesystem: true
-    allowPrivilegeEscalation: false
     restartPolicy: Always
 ingress:
   serviceName: mine-support
