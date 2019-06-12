@@ -1,0 +1,5 @@
+environment: production
+containers:
+  service:
+    registry: 'jwminesupport.azurecr.io/'  
+    apiGateway: http://mine-support-api-gateway:3001

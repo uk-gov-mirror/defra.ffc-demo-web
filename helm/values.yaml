@@ -1,50 +1,40 @@
-# Default values for helm.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-replicaCount: 1
-
-image:
-  repository: nginx
-  tag: stable
-  pullPolicy: IfNotPresent
-
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
-
-service:
-  type: ClusterIP
-  port: 80
-
+environment: development
+containers:
+  service:
+    name: mine-support
+    port: 3000
+    servicePort: 80
+    registry: ''
+    image: mine-support
+    tag: latest
+    imagePullPolicy: IfNotPresent
+    requestMemory: 30Mi
+    requestCpu: 10m
+    limitMemory: 60Mi
+    limitCpu: 40m
+    runAsNonRoot: true
+    runAsUser: 1000
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    cookiePassword: ${COOKIE_PASSWORD}
+    apiGateway: http://localhost:3001
+    restartPolicy: Always
+  redis:
+    name: mine-support-redis
+    port: 6379        
+    image: redis
+    imagePullPolicy: IfNotPresent
+    tag: latest
+    requestMemory: 30Mi
+    requestCpu: 10m
+    limitMemory: 60Mi
+    limitCpu: 40m
+    runAsNonRoot: true
+    runAsUser: 1000
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    restartPolicy: Always
 ingress:
-  enabled: false
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: chart-example.local
-      paths: []
-
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
-
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
+  serviceName: mine-support
+replicas: 2
+minReadySeconds: 5

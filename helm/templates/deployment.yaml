@@ -1,103 +1,32 @@
 apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  annotations:    
-    kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    nginx.ingress.kubernetes.io/affinity: "cookie"
-    nginx.ingress.kubernetes.io/session-cookie-name: "route"
-    nginx.ingress.kubernetes.io/session-cookie-expires: "172800"
-    nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
-  name: web-ingress
-spec:
-  rules:
-  - http:
-      paths:
-      - path: /?(.*)
-        backend:
-          serviceName: mine-support
-          servicePort: 80
----
-apiVersion: v1
-kind: Service
-metadata:
-  annotations:
-    nginx.ingress.kubernetes.io/affinity: "cookie"
-    nginx.ingress.kubernetes.io/session-cookie-name: "route"
-    nginx.ingress.kubernetes.io/session-cookie-expires: "172800"
-    nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
-  labels:
-    app.component: mine-support
-  name: mine-support
-spec:
-  ports:
-  - name: http
-    port: 80
-    targetPort: 3000
-  selector:
-    app.component: mine-support
-status:
-  loadBalancer: {}
----
-apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app.component: mine-support
-  name: mine-support
+    app.component: {{ .Values.containers.service.name }}
+  name: {{ .Values.containers.service.name }}
 spec:
   replicas: 1
   strategy: {}
   template:
     metadata:
       labels:
-        app.component: mine-support
+        app.component: {{ .Values.containers.service.name }}
     spec:
       containers:      
-      - name: mine-support
-        image: jwminesupport.azurecr.io/mine-support
+      - name: {{ .Values.containers.service.name }}
+        image: {{ .Values.containers.service.registry }}{{ .Values.containers.service.image }}:{{ .Values.containers.service.tag }}
+        imagePullPolicy: {{ .Values.containers.service.imagePullPolicy }}
         env:                
         - name: NODE_ENV
-          value: production
+          value: {{ .Values.environment }}
         - name: COOKIE_PASSWORD
-          value: X9wSjhhiZNXk9dvQO1diJcpDUsfag44I
+          value: {{ .Values.containers.service.cookiePassword }}
         - name: REDIS_HOSTNAME
-          value: mine-support-redis
+          value: {{ .Values.containers.redis.name }}
         - name: MINE_SUPPORT_API_GATEWAY
-          value: http://mine-support-api-gateway:3001
+          value: {{ .Values.containers.service.apiGateway }}
         ports:
-        - containerPort: 3000     
+        - containerPort: {{ .Values.containers.service.port }}    
       volumes:       
-      restartPolicy: Always
+      restartPolicy: {{ .Values.containers.service.restartPolicy }}
 status: {}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mine-support-redis
-spec:
-  ports:  
-  - port: 6379
-    protocol: TCP
-  selector:
-    name: mine-support-redis
----
-apiVersion: apps/v1beta1
-kind: StatefulSet
-metadata:
-  name: mine-support-redis
-spec:
-  serviceName: mine-support-redis
-  template:
-    metadata:
-      name: mine-support-redis
-      labels:
-       name: mine-support-redis
-    spec:
-      containers:
-        - name: mine-support-redis
-          image: redis:latest
-          ports:
-            - containerPort: 6379
-
