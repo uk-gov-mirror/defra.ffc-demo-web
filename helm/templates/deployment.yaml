@@ -20,10 +20,7 @@ spec:
         - name: NODE_ENV
           value: {{ .Values.environment }}
         - name: COOKIE_PASSWORD
-          valueFrom:
-              secretKeyRef:
-                key:  cookiePassword
-                name: {{ .Values.containers.service.name }}
+          value: {{ .Values.cookiePassword }}
         - name: REDIS_HOSTNAME
           value: {{ .Values.containers.redis.name }}
         - name: MINE_SUPPORT_API_GATEWAY
