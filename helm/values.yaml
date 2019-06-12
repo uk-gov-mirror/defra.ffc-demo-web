@@ -16,7 +16,6 @@ containers:
     runAsUser: 1000
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
-    cookiePassword: ${COOKIE_PASSWORD}
     apiGateway: http://mine-support-api-gateway:3001
     restartPolicy: Always
   redis:
