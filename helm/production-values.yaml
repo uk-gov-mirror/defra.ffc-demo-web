@@ -1,5 +1,4 @@
 environment: production
 containers:
   service:
-    registry: 'minesupport.azurecr.io/'   
-    apiGateway: http://mine-support-api-gateway:3001
+    registry: 'minesupport.azurecr.io'   

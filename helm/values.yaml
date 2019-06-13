@@ -4,7 +4,7 @@ containers:
     name: mine-support
     port: 3000
     servicePort: 80
-    registry: ''
+    registry:
     image: mine-support
     tag: latest
     imagePullPolicy: IfNotPresent
@@ -16,7 +16,8 @@ containers:
     runAsUser: 1000
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
-    apiGateway: http://mine-support-api-gateway:3001
+    apiGatewayUrl: http://mine-support-api-gateway
+    apiGatewayPort: 3001
     restartPolicy: Always    
   redis:
     name: mine-support-redis

@@ -5,7 +5,8 @@ metadata:
     app.component: {{ .Values.containers.service.name }}
   name: {{ .Values.containers.service.name }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicas }}
+  minReadySeconds: {{ .Values.minReadySeconds }}
   strategy: {}
   template:
     metadata:
@@ -14,7 +15,7 @@ spec:
     spec:
       containers:      
       - name: {{ .Values.containers.service.name }}
-        image: {{ .Values.containers.service.registry }}{{ .Values.containers.service.image }}:{{ .Values.containers.service.tag }}
+        image: {{ if .Values.containers.service.registry }}{{ .Values.containers.service.registry }}/{{ end }}{{ .Values.containers.service.image }}:{{ .Values.containers.service.tag }}
         imagePullPolicy: {{ .Values.containers.service.imagePullPolicy }}
         env:                
         - name: NODE_ENV
@@ -24,9 +25,16 @@ spec:
         - name: REDIS_HOSTNAME
           value: {{ .Values.containers.redis.name }}
         - name: MINE_SUPPORT_API_GATEWAY
-          value: {{ .Values.containers.service.apiGateway }}
+          value: {{ .Values.containers.service.apiGatewayUrl }}:{{ .Values.containers.service.apiGatewayPort }}
         ports:
-        - containerPort: {{ .Values.containers.service.port }}    
+        - containerPort: {{ .Values.containers.service.port }} 
+        resources:
+            requests:
+                memory: {{ .Values.containers.service.requestMemory | quote }}
+                cpu: {{ .Values.containers.service.requestCpu | quote }}
+            limits:
+                memory: {{ .Values.containers.service.limitMemory | quote }}
+                cpu: {{ .Values.containers.service.limitCpu | quote }}   
       volumes:       
       restartPolicy: {{ .Values.containers.service.restartPolicy }}
 status: {}
