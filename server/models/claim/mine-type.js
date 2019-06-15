@@ -11,7 +11,7 @@ function ViewModel (mineTypes, error) {
       }
     },
     hint: {
-      text: 'Select all that apply.'
+      text: 'Select all mine types that apply.'
     },
     items: [
       {

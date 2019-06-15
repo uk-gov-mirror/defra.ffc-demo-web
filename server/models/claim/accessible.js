@@ -1,6 +1,7 @@
 function ViewModel (accessible, error) {
   // Constructor function to create logic dependent nunjucks page
   this.model = {
+    classes: 'govuk-radios--inline',
     idPrefix: 'accessible',
     name: 'accessible',
     fieldset: {
@@ -9,6 +10,9 @@ function ViewModel (accessible, error) {
         isPageHeading: true,
         classes: 'govuk-fieldset__legend--xl'
       }
+    },
+    hint: {
+      text: 'You must be able to access the property safely.'
     },
     items: [
       {

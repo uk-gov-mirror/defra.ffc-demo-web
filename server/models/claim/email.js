@@ -2,7 +2,7 @@ function ViewModel (email, error) {
   // Constructor function to create logic dependent nunjucks page
   this.model = {
     label: {
-      text: 'What is your email address?'
+      text: 'Email'
     },
     classes: 'govuk-input--width-20',
     id: 'email',

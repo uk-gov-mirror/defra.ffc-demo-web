@@ -1,6 +1,7 @@
 function ViewModel (propertyType, error) {
   // Constructor function to create logic dependent nunjucks page
   this.model = {
+    classes: 'govuk-radios--inline',
     idPrefix: 'propertyType',
     name: 'propertyType',
     fieldset: {
@@ -9,6 +10,9 @@ function ViewModel (propertyType, error) {
         isPageHeading: true,
         classes: 'govuk-fieldset__legend--xl'
       }
+    },
+    hint: {
+      text: 'Select which best describes the affected property.'
     },
     items: [
       {
