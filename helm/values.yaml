@@ -28,6 +28,6 @@ containers:
     restartPolicy: Always
 ingress:
   serviceName: mine-support
-replicas: 2
+replicas: 1
 minReadySeconds: 5
 cookiePassword: password
