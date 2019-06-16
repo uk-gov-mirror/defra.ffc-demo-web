@@ -2,6 +2,7 @@ const ViewModel = require('../../models/claim/email')
 const schema = require('../../schemas/claim/email')
 const sessionHandler = require('../../services/session-handler')
 const apiGateway = require('../../services/api-gateway')
+const idService = require('../../services/id-service')
 
 module.exports = [{
   method: 'GET',
@@ -25,9 +26,9 @@ module.exports = [{
     handler: async (request, h) => {
       const claim = sessionHandler.get(request, 'claim')
 
-      // TODO refactor to safely handle clearing of cache when no longer needed and add generation logic for unique Id
+      // TODO refactor to safely handle clearing of cache when no longer needed and add more robus generation logic for unique Id
       if (!claim.submitted) {
-        request.payload.claimId = 'MINE123'
+        request.payload.claimId = idService.generateId()
         sessionHandler.update(request, 'claim', request.payload)
         const submitted = await apiGateway.submit(request)
         if (!submitted) {
