@@ -19,6 +19,7 @@ module.exports = {
     this.set(request, key, existing)
   },
   clear: function (request, key) {
+    console.log(`clearing cached value for ${key}`)
     request.yar.clear(key)
   }
 }

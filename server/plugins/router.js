@@ -6,6 +6,7 @@ const routes = [].concat(
   require('../routes/claim/mine-type'),
   require('../routes/claim/email'),
   require('../routes/claim/confirmation'),
+  require('../routes/clear-session'),
   require('../routes/public')
 )
 
