@@ -1,33 +1,27 @@
 environment: development
-containers:
-  service:
-    name: mine-support
-    port: 3000
-    servicePort: 80
-    registry:
-    image: mine-support
-    tag: latest
-    imagePullPolicy: IfNotPresent
-    requestMemory: 30Mi
-    requestCpu: 10m
-    limitMemory: 60Mi
-    limitCpu: 40m
-    runAsNonRoot: true
-    runAsUser: 1000
-    readOnlyRootFilesystem: true
-    allowPrivilegeEscalation: false
-    apiGatewayUrl: http://mine-support-api-gateway
-    apiGatewayPort: 3001
-    restartPolicy: Always    
-  redis:
-    name: mine-support-redis
-    port: 6379        
-    image: redis
-    imagePullPolicy: IfNotPresent
-    tag: latest
-    restartPolicy: Always
+image: mine-support
+service:
+  port: 80
+
+container:
+  name: mine-support
+  redisname: redis-redis-ha.mine-support
+  port: 3000
+  imagePullPolicy: IfNotPresent
+  requestMemory: 30Mi
+  requestCpu: 10m
+  limitMemory: 60Mi
+  limitCpu: 41m
+  runAsNonRoot: true
+  runAsUser: 1000
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  apiGatewayUrl: http://mine-support-api-gateway
+  apiGatewayPort: 3001
+  restartPolicy: Always
 ingress:
   serviceName: mine-support
+  endPoint: mine-support
 replicas: 1
 minReadySeconds: 5
-cookiePassword: password
+cookiePassword: passwordpasswordpasswordpasswordpassword

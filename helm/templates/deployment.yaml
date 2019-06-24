@@ -2,8 +2,8 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app.component: {{ .Values.containers.service.name }}
-  name: {{ .Values.containers.service.name }}
+    app.component: {{ .Values.container.name }}
+  name: {{ .Values.container.name }}
 spec:
   replicas: {{ .Values.replicas }}
   minReadySeconds: {{ .Values.minReadySeconds }}
@@ -11,30 +11,40 @@ spec:
   template:
     metadata:
       labels:
-        app.component: {{ .Values.containers.service.name }}
+        app.component: {{ .Values.container.name }}
     spec:
-      containers:      
-      - name: {{ .Values.containers.service.name }}
-        image: {{ if .Values.containers.service.registry }}{{ .Values.containers.service.registry }}/{{ end }}{{ .Values.containers.service.image }}:{{ .Values.containers.service.tag }}
-        imagePullPolicy: {{ .Values.containers.service.imagePullPolicy }}
+      containers:
+      - name: {{ .Values.container.name }}
+        image: {{ .Values.image }}
+        {{- if .Values.container.command }}
+        {{- with .Values.container.command }}
+        command:
+          {{- toYaml . | nindent 12 }}
+        {{- end }}
+        {{- with .Values.container.args }}
+        args:
+          {{- toYaml . | nindent 12 }}
+        {{- end }}
+        {{- end }}
+        imagePullPolicy: {{ .Values.container.imagePullPolicy }}
         env:                
         - name: NODE_ENV
           value: {{ .Values.environment }}
         - name: COOKIE_PASSWORD
           value: {{ .Values.cookiePassword }}
         - name: REDIS_HOSTNAME
-          value: {{ .Values.containers.redis.name }}
+          value: {{ .Values.container.redisname }}
         - name: MINE_SUPPORT_API_GATEWAY
-          value: {{ .Values.containers.service.apiGatewayUrl }}:{{ .Values.containers.service.apiGatewayPort }}
+          value: {{ .Values.container.apiGatewayUrl }}:{{ .Values.container.apiGatewayPort }}
         ports:
-        - containerPort: {{ .Values.containers.service.port }} 
+        - containerPort: {{ .Values.container.port }} 
         resources:
             requests:
-                memory: {{ .Values.containers.service.requestMemory | quote }}
-                cpu: {{ .Values.containers.service.requestCpu | quote }}
+                memory: {{ .Values.container.requestMemory | quote }}
+                cpu: {{ .Values.container.requestCpu | quote }}
             limits:
-                memory: {{ .Values.containers.service.limitMemory | quote }}
-                cpu: {{ .Values.containers.service.limitCpu | quote }}   
+                memory: {{ .Values.container.limitMemory | quote }}
+                cpu: {{ .Values.container.limitCpu | quote }}   
       volumes:       
-      restartPolicy: {{ .Values.containers.service.restartPolicy }}
+      restartPolicy: {{ .Values.container.restartPolicy }}
 status: {}

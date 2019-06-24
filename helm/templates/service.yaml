@@ -7,25 +7,14 @@ metadata:
     nginx.ingress.kubernetes.io/session-cookie-expires: "172800"
     nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
   labels:
-    app.component: {{ .Values.containers.service.name }}
-  name: {{ .Values.containers.service.name }}
+    app.component: {{ .Values.container.name }}
+  name: {{ .Values.container.name }}
 spec:
   ports:
   - name: http
-    port: {{ .Values.containers.service.servicePort }}
-    targetPort: {{ .Values.containers.service.port }}
+    port: {{ .Values.service.port }}
+    targetPort: {{ .Values.container.port }}
   selector:
-    app.component: {{ .Values.containers.service.name }}
+    app.component: {{ .Values.container.name }}
 status:
   loadBalancer: {}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ .Values.containers.redis.name }}
-spec:
-  ports:  
-  - port: {{ .Values.containers.redis.port }}
-    protocol: TCP
-  selector:
-    name: {{ .Values.containers.redis.name }}
