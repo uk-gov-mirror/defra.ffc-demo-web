@@ -28,7 +28,7 @@ Now the application is ready to run:
 
 to get running against redis-ha locally you must deploy with no affinities, so redis nodes can be on same worker node, set the replicas to one, and set min slaves to zero. This can be donw via the provided `redis.yaml` file:
 
-`helm install --namespace mine-support --name redis -f red.yaml stable/redis-ha`
+`helm install --namespace mine-support --name redis -f redis.yaml stable/redis-ha`
 
 Further information: https://stackoverflow.com/questions/55365775/redis-ha-helm-chart-error-noreplicas-not-enough-good-replicas-to-write
 
