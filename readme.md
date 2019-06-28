@@ -1,4 +1,4 @@
-[![Build status](https://johnwatson484.visualstudio.com/John%20D%20Watson/_apis/build/status/Mine%20Support)](https://johnwatson484.visualstudio.com/John%20D%20Watson/_build/latest?definitionId=-1)
+[![Build status](https://defradev.visualstudio.com/DEFRA_FutureFarming/_apis/build/status/defra-ff-mine-support-spike)](https://defradev.visualstudio.com/DEFRA_FutureFarming/_build/latest?definitionId=-1)
 
 # Mine Support
 Digital service mock to claim public money in the event property subsides into mine shaft.
