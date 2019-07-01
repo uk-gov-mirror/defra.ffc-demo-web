@@ -1,0 +1,12 @@
+environment: development
+container:
+  redisname: redis-redis-ha.mine-support
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: true
+  command: ["node"]
+  args: ["index.js"]
+  # command: ["npx"]
+  # args: ["nodemon", "--inspect=0.0.0.0", "--ext", "js,njk", "--legacy-watch", "index.js"]
+ingress:
+  endpoint: skaffold-mine-support
+replicaCount: 1

@@ -10,9 +10,17 @@ services:
     build: .
     image: mine-support
     container_name: mine-support
+    command: npm run start-watch
     environment:
-      COOKIE_PASSWORD: ${COOKIE_PASSWORD}
+      COOKIE_PASSWORD: cookiecookiecookiecookiecookiecookie
+      REDIS_HOSTNAME: mine-support-redis
     ports:
         - "3000:3000"
     depends_on:
         - mine-support-redis
+    volumes:
+      - node_modules:/mine-support/node_modules
+      - .:/mine-support
+
+volumes:
+  node_modules:

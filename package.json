@@ -8,6 +8,7 @@
     "build": "bin/build",
     "lint": "standard",
     "unit-test": "lab -c -r console -o stdout -r lcov -o lcov.info",
+    "start-watch": "nodemon --inspect=0.0.0.0 --ext js,njk --legacy-watch index.js",
     "test": "npm run lint && npm run unit-test",
     "postinstall": "npm run build"
   },
@@ -38,6 +39,7 @@
     "good-squeeze": "5.1.0",
     "lab": "18.0.2",
     "node-sass": "4.11.0",
+    "nodemon": "1.19.1",
     "standard": "12.0.1"
   }
 }
