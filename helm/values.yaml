@@ -5,13 +5,13 @@ service:
 
 container:
   name: mine-support
-  redisname: redis-redis-ha.mine-support
+  redisname: redis-redis-ha
   port: 3000
   imagePullPolicy: IfNotPresent
   requestMemory: 30Mi
   requestCpu: 10m
   limitMemory: 60Mi
-  limitCpu: 41m
+  limitCpu: 40m
   runAsNonRoot: true
   runAsUser: 1000
   readOnlyRootFilesystem: true
