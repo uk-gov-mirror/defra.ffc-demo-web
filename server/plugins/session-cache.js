@@ -10,7 +10,9 @@ module.exports = {
     },
     cookieOptions: {
       password: config.cookiePassword,
-      isSecure: config.env !== 'development'
+      // production is currently not https, so a new cookie is created for every request, including css
+      // isSecure: config.env !== 'development'
+      isSecure: false
     }
   }
 }

@@ -17,7 +17,7 @@ const schema = {
 const config = {
   port: process.env.PORT,
   env: process.env.NODE_ENV,
-  cacheName: process.env.MINE_SUPPORT_CACHE_NAME || 'minesupportcache',
+  cacheName: process.env.MINE_SUPPORT_CACHE_NAME,
   redisHost: process.env.REDIS_HOSTNAME,
   redisPort: process.env.REDIS_PORT,
   cookiePassword: process.env.COOKIE_PASSWORD,
