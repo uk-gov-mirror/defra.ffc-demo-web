@@ -11,7 +11,7 @@ container:
   requestMemory: 30Mi
   requestCpu: 10m
   limitMemory: 60Mi
-  limitCpu: 40m
+  limitCpu: 50m
   runAsNonRoot: true
   runAsUser: 1000
   readOnlyRootFilesystem: true
