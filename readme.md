@@ -1,21 +1,26 @@
 [![Build status](https://defradev.visualstudio.com/DEFRA_FutureFarming/_apis/build/status/defra-ff-mine-support-spike)](https://defradev.visualstudio.com/DEFRA_FutureFarming/_build/latest?definitionId=-1)
 
 # Mine Support
-Digital service mock to claim public money in the event property subsides into mine shaft.
+Digital service mock to claim public money in the event property subsides into mine shaft.  This is the web front end for the application.  It contains a simple claim submission journey where user input data is cached in Redis.  On submission the data is pulled from Redis and passed to the API gateway.
 
 # Environment variables
-
-| name     | description      | required | default |            valid            | notes |
-|----------|------------------|:--------:|---------|:---------------------------:|-------|
-| NODE_ENV | Node environment |    no    |         | development,test,production |       |
-| PORT     | Port number      |    no    | 3000    |                             |       |
+|Name|Description|Required|Default|Valid|Notes|
+|---|---|:---:|---|---|---|
+|NODE_ENV|Node environment|no|development|development,test,production||
+|PORT|Port number|no|3000|||
+|MINE_SUPPORT_CACHE_NAME|Cache name|no|redisCache|||
+|REDIS_HOSTNAME|Redis host|no|localhost|||
+|REDIS_PORT|Redis port|no|6379|||
+|COOKIE_PASSWORD|Redis cookie password|yes||||
+|MINE_SUPPORT_SESSION_TIMEOUT_IN_MINUTES|Redis session timeout|no|30|||
+|MINE_SUPPORT_API_GATEWAY|Url of service API Gateway|no|http://localhost:3001|||
+|MINE_SUPPORT_REST_CLIENT_TIMEOUT_IN_MILLIS|Rest client timout|no|5000|||
 
 # Prerequisites
-
 Node v10+
+Redis 
 
 # Running the application
-
 First build the application using:
 
 `$ npm run build`
@@ -24,9 +29,13 @@ Now the application is ready to run:
 
 `$ node index.js`
 
-# Note on Running Locally
+Alternatively the project can be run in a container through the docker-compose.yaml file.
 
-to get running against redis-ha locally you must deploy with no affinities, so redis nodes can be on same worker node, set the replicas to one, and set min slaves to zero. This can be donw via the provided `redis.yaml` file:
+# Kubernetes
+The service has been developed with the intention of running in Kubernetes.  A helm chart is included in the `.\helm` folder.
+
+# Note on running in local Kubernetes cluster
+To get running against redis-ha locally you must deploy with no affinities, so redis nodes can be on same worker node, set the replicas to one, and set min slaves to zero. This can be donw via the provided `redis.yaml` file:
 
 `helm install --namespace mine-support --name redis -f redis.yaml stable/redis-ha`
 
@@ -43,4 +52,7 @@ The docker-compose file can be launched via `./bin/start-compose`. This will sta
 For the volume mounts to work correct via WSL the application needs to be run from `/c/...` rather than `/mnt/c/..`.
 You may need to create a directory at `/c` then mount it via `sudo mount --bind /mnt/c /c` to be able to change to `/c/..`
 
+# How to run tests
+Unit tests are written in Lab and can be run with the following command:
 
+`npm run test`
