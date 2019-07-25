@@ -3,3 +3,6 @@
 node_modules
 npm-debug.log
 lcov.info
+auth
+test-output
+server/public/build
