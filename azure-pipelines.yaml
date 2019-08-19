@@ -63,26 +63,29 @@ steps:
     mkdir test-output
     chmod 777 test-output
   displayName: create test output directory
+  # build test image
 - task: DockerCompose@0
   inputs:
+    action: Build services
     containerregistrytype: Azure Container Registry
     azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
     azureContainerRegistry: $(azureContainerRegistryFull)
-    dockerComposeFile: docker-compose-test.yaml
+    dockerComposeFile: docker-compose.yaml
+    additionalDockerComposeFiles: docker-compose.test.yaml
     projectName: $(Build.Repository.Name)
     qualifyImageNames: true
-    dockerComposeCommand: build --no-cache test
-  displayName: build tests image
+  displayName: build test image
   # run tests
 - task: DockerCompose@0
   inputs:
     containerregistrytype: Azure Container Registry
     azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
     azureContainerRegistry: $(azureContainerRegistryFull)
-    dockerComposeFile: docker-compose-test.yaml
+    dockerComposeFile: docker-compose.yaml
+    additionalDockerComposeFiles: docker-compose.test.yaml
     projectName: $(Build.Repository.Name)
     qualifyImageNames: true
-    dockerComposeCommand: up --force-recreate test
+    dockerComposeCommand: run $(imageName)
   displayName: run tests
   # build base image
 - task: DockerCompose@0
