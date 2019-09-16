@@ -1,24 +1,24 @@
 version: '3'
 services:
-  mine-support:
+  ffc-demo-web:
     build: .
-    image: mine-support
-    container_name: mine-support
+    image: ffc-demo-web
+    container_name: ffc-demo-web
     command: npm run start:watch
     depends_on:
-      - mine-support-redis
+      - ffc-demo-web-redis
     environment:
       COOKIE_PASSWORD: cookiecookiecookiecookiecookiecookie
-      MINE_SUPPORT_API_GATEWAY: http://mine-support-api-gateway:3001
-      REDIS_HOSTNAME: mine-support-redis
+      API_GATEWAY: http://ffc-demo-api-gateway:3001
+      REDIS_HOSTNAME: ffc-demo-web-redis
     networks:
-      - mine-support-redis
+      - ffc-demo-web-redis
 
-  mine-support-redis:
+  ffc-demo-web-redis:
     image: redis
-    container_name: mine-support-redis
+    container_name: ffc-demo-web-redis
     networks:
-      - mine-support-redis
+      - ffc-demo-web-redis
     ports:
       - "6379:6379"
     volumes:
@@ -26,7 +26,7 @@ services:
 
 
 networks:
-  mine-support-redis: {}
+  ffc-demo-web-redis: {}
 
 volumes:
   redis_data:
