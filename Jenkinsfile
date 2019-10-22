@@ -11,14 +11,12 @@ def containerTag = ''
 
 def getMergedPrNo() {
     def mergedPrNo = sh(returnStdout: true, script: "git log --pretty=oneline --abbrev-commit -1 | sed -n 's/.*(#\\([0-9]\\+\\)).*/\\1/p'").trim()
-    return mergedPrNo ?: ''
+    return mergedPrNo ? "pr$mergedPrNo" : ''
 }
 
 def getVariables(repoName) {
-    // jenkins checks out a commit, rather than a branch
-    // use the git cli to get branch info for the commit
-    def branch = sh(returnStdout: true, script: 'git ls-remote --heads origin | grep $(git rev-parse HEAD) | cut -d / -f 3').trim()
-    // and the github API to get the current open PR for the branch. 
+    def branch = BRANCH_NAME
+    // use the git API to get the open PR for a branch
     // Note: This will cause issues if one branch has two open PRs
     def pr = sh(returnStdout: true, script: "curl https://api.github.com/repos/DEFRA/$repoName/pulls?state=open | jq '.[] | select(.head.ref == \"$branch\") | .number'").trim()
     def rawTag = pr == '' ? branch : "pr$pr"
@@ -27,7 +25,7 @@ def getVariables(repoName) {
 }
 
 def buildTestImage(name, suffix) {
-  sh 'docker image prune -f'
+  sh 'docker image prune -f || echo could not prune images'
   // NOTE: the docker-compose file currently makes use of global $BUILD_NUMBER env vars fo image names
   sh "docker-compose -p $name-$suffix -f docker-compose.yaml -f docker-compose.test.yaml build --no-cache $name"
 }
@@ -42,7 +40,7 @@ def runTests(name, suffix) {
     sh "docker-compose -p $name-$suffix -f docker-compose.yaml -f docker-compose.test.yaml down -v"
     junit 'test-output/junit.xml'
     // clean up files created by node/ubuntu user that cannot be deleted by jenkins. Note: uses global environment variable
-    sh "docker run --rm -u node --mount type=bind,source=$WORKSPACE/test-output,target=/usr/src/app/test-output $name rm -rf test-output/*"
+    sh "docker run --rm -u node --mount type=bind,source='$WORKSPACE/test-output',target=/usr/src/app/test-output $name rm -rf test-output/*"
   }
 }
 
@@ -66,7 +64,7 @@ def undeployPR(credentialsId, imageName, tag) {
   withKubeConfig([credentialsId: credentialsId]) {
     def deploymentName = "$imageName-$tag"
     sh "helm delete --purge $deploymentName || echo error removing deployment $deploymentName"
-    sh "kubectl delete $deploymentName"
+    sh "kubectl delete namespaces $deploymentName || echo error removing namespace $deploymentName"
   }
 }
 
@@ -88,11 +86,18 @@ def publishChart(imageName) {
     }
   }
 }
-
 node {
   checkout scm
   stage('Set branch, PR, and containerTag variables') {
     (branch, pr, containerTag, mergedPrNo) = getVariables(repoName)
+    if (pr ) {
+      sh "echo Building $pr"
+    } else if (branch == "master") {
+      sh "echo Building master branch"
+    } else {
+      currentBuild.result = 'ABORTED'
+      error('Build aborted - not a PR or a master branch')
+    }
   }
   stage('Build test image') {
     buildTestImage(imageName, BUILD_NUMBER)
@@ -107,9 +112,15 @@ node {
   }
   if (pr != '') {
     stage('Helm install') {
-      def extraCommands = "--values ./helm/ffc-demo-web/jenkins-aws.yaml --set name=ffc-demo-$containerTag,ingress.server=$ingressServer,ingress.endpoint=ffc-demo-$containerTag,ingress.alb.tags=${params.albTags},ingress.alb.arn=${params.albArn},ingress.alb.securityGroups=${params.albSecurityGroups}"
-      deployPR(kubeCredsId, registry, imageName, containerTag, extraCommands)
-      echo "Build available for review at https://ffc-demo-$containerTag.$ingressServer"
+      withCredentials([
+          string(credentialsId: 'albTags', variable: 'albTags'),
+          string(credentialsId: 'albSecurityGroups', variable: 'albSecurityGroups'),
+          string(credentialsId: 'albArn', variable: 'albArn')
+        ]) {
+        def extraCommands = "--values ./helm/ffc-demo-web/jenkins-aws.yaml --set name=ffc-demo-$containerTag,ingress.server=$ingressServer,ingress.endpoint=ffc-demo-$containerTag,ingress.alb.tags=\"$albTags\",ingress.alb.arn=\"$albArn\",ingress.alb.securityGroups=\"$albSecurityGroups\""
+        deployPR(kubeCredsId, registry, imageName, containerTag, extraCommands)
+        echo "Build available for review at https://ffc-demo-$containerTag.$ingressServer"
+      }
     }
   }
   if (pr == '') {
