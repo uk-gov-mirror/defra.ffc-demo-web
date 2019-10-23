@@ -1,7 +1,7 @@
 def registry = '562955126301.dkr.ecr.eu-west-2.amazonaws.com'
 def regCredsId = 'ecr:eu-west-2:ecr-user'
 def kubeCredsId = 'awskubeconfig002'
-def ingressServer = "ffc.aws-int.defra.cloud"
+def ingressServer = 'ffc.aws-int.defra.cloud'
 def imageName = 'ffc-demo-web'
 def repoName = 'ffc-demo-web'
 def repoUrl = ''
@@ -88,13 +88,14 @@ def undeployPR(credentialsId, imageName, tag) {
   }
 }
 
-def publishChart(imageName) {
+def publishChart(registry, imageName, containerTag) {
   // jenkins doesn't tidy up folder, remove old charts before running
   sh "rm -rf helm-charts"
   sshagent(credentials: ['helm-chart-creds']) {
     sh "git clone git@gitlab.ffc.aws-int.defra.cloud:helm/helm-charts.git"
     dir('helm-charts') {
       sh 'helm init -c'
+      sh "sed -i -e 's/image: $imageName/image: $registry\\/$imageName:$containerTag/' ../helm/$imageName/values.yaml"
       sh "helm package ../helm/$imageName"
       sh 'helm repo index .'
       sh 'git config --global user.email "buildserver@defra.gov.uk"'
@@ -147,7 +148,7 @@ node {
     }
     if (pr == '') {
       stage('Publish chart') {
-        publishChart(imageName)
+        publishChart(registry, imageName, containerTag)
       }
     }
     if (mergedPrNo != '') {
