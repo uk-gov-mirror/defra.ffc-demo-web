@@ -1,4 +1,4 @@
-@Library('defra-library@0.0.3')
+@Library('defra-library@0.0.4')
 import uk.gov.defra.ffc.DefraUtils
 def defraUtils = new DefraUtils()
 
@@ -35,7 +35,22 @@ node {
             string(credentialsId: 'albSecurityGroups', variable: 'albSecurityGroups'),
             string(credentialsId: 'albArn', variable: 'albArn')
           ]) {
-          def extraCommands = "--values ./helm/ffc-demo-web/jenkins-aws.yaml --set name=ffc-demo-$containerTag,ingress.server=$ingressServer,ingress.endpoint=ffc-demo-$containerTag,ingress.alb.tags=\"$albTags\",ingress.alb.arn=\"$albArn\",ingress.alb.securityGroups=\"$albSecurityGroups\""
+
+          def helmValues = [
+            /container.redeployOnChange="$pr-$BUILD_NUMBER"/,
+            /ingress.alb.tags="$albTags"/,
+            /ingress.alb.arn="$albArn"/,
+            /ingress.alb.securityGroups="$albSecurityGroups"/,
+            /ingress.endpoint="ffc-demo-$containerTag"/,
+            /ingress.server="$ingressServer"/,
+            /name="ffc-demo-$containerTag"/
+          ].join(',')
+
+          def extraCommands = [
+            "--values ./helm/ffc-demo-web/jenkins-aws.yaml",
+            "--set $helmValues"
+          ].join(' ')
+
           defraUtils.deployChart(kubeCredsId, registry, imageName, containerTag, extraCommands)
           echo "Build available for review at https://ffc-demo-$containerTag.$ingressServer"
         }
