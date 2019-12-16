@@ -11,6 +11,29 @@ def repoName = 'ffc-demo-web'
 def pr = ''
 def mergedPrNo = ''
 def containerTag = ''
+def sonarQubeEnv = 'SonarQube'
+def sonarScanner = 'SonarScanner'
+
+def analyseCode(sonarQubeEnv, sonarScanner, params) {
+  def scannerHome = tool sonarScanner
+  withSonarQubeEnv(sonarQubeEnv) { 
+    def args = ''   
+    params.each { param ->
+      args = args + " -D$param.key=$param.value"
+    }
+
+    sh "${scannerHome}/bin/sonar-scanner$args"
+  }
+}
+
+def waitForQualityGateResult(timeoutInMinutes) {
+  timeout(time: timeoutInMinutes, unit: 'MINUTES') {
+    def qualityGateResult = waitForQualityGate()
+    if (qualityGateResult.status != 'OK') {
+      error "Pipeline aborted due to quality gate failure: ${qualityGateResult.status}"
+    }
+  }
+}
 
 node {
   checkout scm
@@ -18,7 +41,7 @@ node {
     stage('Set PR, and containerTag variables') {
       (pr, containerTag, mergedPrNo) = defraUtils.getVariables(repoName)
       defraUtils.setGithubStatusPending()
-    }
+    }    
     stage('Helm lint') {
       defraUtils.lintHelm(imageName)
     }
@@ -27,6 +50,12 @@ node {
     }
     stage('Run tests') {
       defraUtils.runTests(imageName, BUILD_NUMBER)
+    }
+    stage('SonarQube analysis') {
+      analyseCode(sonarQubeEnv, sonarScanner, ['sonar.projectKey' : repoName, 'sonar.sources' : '.'])
+    }
+    stage("Code quality gate") {
+      waitForQualityGateResult(5)
     }
     stage('Push container image') {
       defraUtils.buildAndPushContainerImage(regCredsId, registry, imageName, containerTag)
