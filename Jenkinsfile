@@ -32,6 +32,9 @@ node {
     stage('Set PR, and containerTag variables') {
       (pr, containerTag, mergedPrNo) = defraUtils.getVariables(repoName, defraUtils.getPackageJsonVersion())      
     }    
+    stage('Set PR, and containerTag variables') {
+      (pr, containerTag, mergedPrNo) = defraUtils.getVariables(repoName, defraUtils.getPackageJsonVersion())      
+    }    
     stage('Helm lint') {
       defraUtils.lintHelm(repoName)
     }
@@ -57,6 +60,9 @@ node {
       defraUtils.buildAndPushContainerImage(regCredsId, registry, repoName, containerTag)
     }
     if (pr != '') {
+      stage('Verify version incremented') {
+        defraUtils.verifyPackageJsonVersionIncremented()
+      }
       stage('Helm install') {
         withCredentials([
             string(credentialsId: 'albTags', variable: 'albTags'),
