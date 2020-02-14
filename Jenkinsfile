@@ -22,6 +22,12 @@ node {
   try {
     stage('Set GitHub status as pending'){
       defraUtils.setGithubStatusPending()
+    }
+    stage('Verify version incremented') {
+      defraUtils.verifyPackageJsonVersionIncremented()
+    }
+    stage('Set PR, and containerTag variables') {
+      (pr, containerTag, mergedPrNo) = defraUtils.getVariables(repoName, defraUtils.getPackageJsonVersion())      
     }    
     stage('Set PR, and containerTag variables') {
       (pr, containerTag, mergedPrNo) = defraUtils.getVariables(repoName, defraUtils.getPackageJsonVersion())      
@@ -80,10 +86,7 @@ node {
         }
       }
     }
-    if (pr == '') {
-      stage('Verify version incremented') {
-        defraUtils.verifyPackageJsonVersionIncremented()
-      }
+    if (pr == '') {      
       stage('Publish chart') {
         defraUtils.publishChart(registry, repoName, containerTag)
       }
