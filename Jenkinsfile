@@ -1,4 +1,4 @@
-@Library('defra-library@0.0.15')
+@Library('defra-library@0.0.16')
 import uk.gov.defra.ffc.DefraUtils
 def defraUtils = new DefraUtils()
 
@@ -91,7 +91,7 @@ node {
         withCredentials([
           string(credentialsId: 'github_ffc_platform_repo', variable: 'gitToken') 
         ]) {
-          defraUtils.triggerRelease(containerTag, repoName, containerTag, gitToken)
+          defraUtils.triggerRelease(containerTag, repoName, defraUtils.getCommitMessage(), gitToken)
         }
       }
       stage('Trigger Deployment') {
