@@ -1,4 +1,4 @@
-@Library('defra-library@0.0.9')
+@Library('defra-library@0.0.13')
 import uk.gov.defra.ffc.DefraUtils
 def defraUtils = new DefraUtils()
 
@@ -6,7 +6,6 @@ def registry = '562955126301.dkr.ecr.eu-west-2.amazonaws.com'
 def regCredsId = 'ecr:eu-west-2:ecr-user'
 def kubeCredsId = 'FFCLDNEKSAWSS001_KUBECONFIG'
 def ingressServer = 'ffc.aws-int.defra.cloud'
-def imageName = 'ffc-demo-web'
 def repoName = 'ffc-demo-web'
 def pr = ''
 def mergedPrNo = ''
@@ -21,18 +20,20 @@ def timeoutInMinutes = 5
 node {
   checkout scm
   try {
-    stage('Set PR, and containerTag variables') {
-      (pr, containerTag, mergedPrNo) = defraUtils.getVariables(repoName)
+    stage('Set GitHub status as pending'){
       defraUtils.setGithubStatusPending()
     }    
+    stage('Set PR, and containerTag variables') {
+      (pr, containerTag, mergedPrNo) = defraUtils.getVariables(repoName, defraUtils.getPackageJsonVersion())      
+    }    
     stage('Helm lint') {
-      defraUtils.lintHelm(imageName)
+      defraUtils.lintHelm(repoName)
     }
     stage('Build test image') {
-      defraUtils.buildTestImage(imageName, BUILD_NUMBER)
+      defraUtils.buildTestImage(repoName, BUILD_NUMBER)
     }
     stage('Run tests') {
-      defraUtils.runTests(imageName, BUILD_NUMBER)
+      defraUtils.runTests(repoName, BUILD_NUMBER)
     }
     stage('Create Test Report JUnit'){
       defraUtils.createTestReportJUnit()
@@ -47,7 +48,7 @@ node {
       defraUtils.waitForQualityGateResult(timeoutInMinutes)
     }
     stage('Push container image') {
-      defraUtils.buildAndPushContainerImage(regCredsId, registry, imageName, containerTag)
+      defraUtils.buildAndPushContainerImage(regCredsId, registry, repoName, containerTag)
     }
     if (pr != '') {
       stage('Helm install') {
@@ -74,14 +75,24 @@ node {
             "--set $helmValues"
           ].join(' ')
 
-          defraUtils.deployChart(kubeCredsId, registry, imageName, containerTag, extraCommands)
+          defraUtils.deployChart(kubeCredsId, registry, repoName, containerTag, extraCommands)
           echo "Build available for review at https://ffc-demo-$containerTag.$ingressServer"
         }
       }
     }
     if (pr == '') {
+      stage('Verify version incremented') {
+        defraUtils.verifyPackageJsonVersionIncremented()
+      }
       stage('Publish chart') {
-        defraUtils.publishChart(registry, imageName, containerTag)
+        defraUtils.publishChart(registry, repoName, containerTag)
+      }
+      stage('Trigger GitHub release') {
+        withCredentials([
+          string(credentialsId: 'ffc-demo-web-deploy-token', variable: 'gitToken') 
+        ]) {
+          defraUtils.triggerRelease(containerTag, repoName, containerTag, gitToken)
+        }
       }
       stage('Trigger Deployment') {
         withCredentials([
@@ -94,14 +105,17 @@ node {
     }
     if (mergedPrNo != '') {
       stage('Remove merged PR') {
-        defraUtils.undeployChart(kubeCredsId, imageName, mergedPrNo)
+        defraUtils.undeployChart(kubeCredsId, repoName, mergedPrNo)
       }
     }
-    defraUtils.setGithubStatusSuccess()
+    stage('Set GitHub status as success'){
+      defraUtils.setGithubStatusSuccess()
+    }    
   } catch(e) {
     defraUtils.setGithubStatusFailure(e.message)
+    defraUtils.notifySlackBuildFailure(e.message, "#generalbuildfailures")
     throw e
   } finally {
-    defraUtils.deleteTestOutput(imageName)
+    defraUtils.deleteTestOutput(repoName)
   }
 }
