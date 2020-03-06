@@ -60,6 +60,8 @@ node {
 
           def helmValues = [
             /container.redeployOnChange="$pr-$BUILD_NUMBER"/,
+            /container.redisHostname="$REDIS_HOSTNAME"/,
+            /container.redisPartition="ffc-demo-$containerTag"/,
             /cookiePassword="$cookiePassword"/,
             /ingress.alb.tags="$albTags"/,
             /ingress.alb.arn="$albArn"/,
