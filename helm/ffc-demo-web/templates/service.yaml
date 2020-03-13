@@ -10,14 +10,14 @@ metadata:
     nginx.ingress.kubernetes.io/session-cookie-expires: "172800"
     nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
   name: {{ quote .Values.name }}
-  labels:
-    app: {{ quote .Values.name }}
-  namespace: {{quote .Values.namespace}}
+  labels: {{ include "ffc-demo.labels" . | trimSuffix "\n" | indent 2 }}
 spec:
   ports:
   - name: http
     port: {{ .Values.service.port }}
     targetPort: http
   selector:
-    app: {{ quote .Values.name }}
+    app.kubernetes.io/name: {{ quote .Values.name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app: {{ quote .Values.namespace }}
   type: {{ quote .Values.service.type }}

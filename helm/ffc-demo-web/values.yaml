@@ -4,6 +4,10 @@ name: ffc-demo-web
 namespace: ffc-demo
 auth:
 imagePullSecret:
+labels:
+  instance:
+  version: 1.0.0
+  component: service
 service:
   port: 80
   type: ClusterIP
@@ -28,7 +32,7 @@ container:
   staticCacheTimeoutMillis: 54000
 ingress:
   endPoint: ffc-demo
-  server: vividcloudsolutions.co.uk
+  server:
 replicas: 1
 minReadySeconds: 5
 cookiePassword: passwordpasswordpasswordpasswordpassword
