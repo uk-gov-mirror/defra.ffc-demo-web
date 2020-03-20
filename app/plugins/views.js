@@ -2,7 +2,6 @@ const path = require('path')
 const nunjucks = require('nunjucks')
 const config = require('../config')
 const pkg = require('../../package.json')
-const analyticsAccount = config.analyticsAccount
 
 module.exports = {
   plugin: require('@hapi/vision'),
@@ -34,10 +33,10 @@ module.exports = {
     isCached: !config.isDev,
     context: {
       appVersion: pkg.version,
-      assetPath: '/assets',
+      assetPath: '/static',
+      govukAssetPath: '/assets',
       serviceName: 'FFC Demo Service',
-      pageTitle: 'FFC Demo Service - GOV.UK',
-      analyticsAccount: analyticsAccount
+      pageTitle: 'FFC Demo Service - GOV.UK'
     }
   }
 }

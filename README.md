@@ -72,22 +72,22 @@ npm run test
 
 ### Test watcher
 
-A more convenient way to run tests in development is to use a file watcher to automatically run tests each time associated files are modified. For this purpose, the default docker-compose configuration mounts all app, test and git files into the main `app` container, enabling the test watcher to be run as shown below. The same approach may be used to execute arbitrary commands in the running app.
+A more convenient way to run tests in development is to use a file watcher to automatically run tests each time associated files are modified. For this purpose, the default docker-compose configuration mounts all app, test and git files into the main `ffc-demo-web` container, enabling the test watcher to be run as shown below. The same approach may be used to execute arbitrary commands in the running app.
 
 ```
 # Run unit test file watcher
-docker-compose exec app npm run test:unit-watch
+docker-compose run ffc-demo-web npm run test:unit-watch
 
 # Run all tests
-docker-compose exec app npm test
+docker-compose run ffc-demo-web npm test
 
 # Open an interactive shell in the app container
-docker-compose exec app sh
+docker-compose run ffc-demo-web sh
 ```
 
-### Why docker-compose.test.yaml exists
+### Why the docker-compose.test.yaml exists
 
-Given that tests can be run in the main app container during development, it may not be obvious why `docker-compose.test.yaml` exists. It's main purpose is for CI pipelines, where tests need to run in a container without any ports forwarded from the host machine.
+Given that tests can be run in the main ffc-demo-web container during development, it may not be obvious why `docker-compose.test.yaml` exists. It's main purpose is for CI pipelines, where tests need to run in a container without any ports forwarded from the host machine.
 
 ## Running the application
 
@@ -98,6 +98,10 @@ The application is designed to run in containerised environments, using Docker C
 ### Build container image
 
 Container images are built using Docker Compose, with the same images used to run the service with either Docker Compose or Kubernetes.
+
+When using the Docker Compose files in development the local `app` folder will be mounted on top of the `app` folder within the Docker container, hiding the css files that were generated during the Docker build. 
+For the site to render correctly locally `npm run build` must be run on the host system.
+
 
 By default, the start script will build (or rebuild) images so there will rarely be a need to build images manually. However, this can be achieved through the Docker Compose [build](https://docs.docker.com/compose/reference/build/) command:
 
@@ -204,7 +208,7 @@ Now the application is ready to run:
 
 ## Build Pipeline
 
-The [azure-pipelines.yaml](azure-pipelines.yaml) performs the following tasks:
+The [Jenkinsfile](Jenkinsfile) performs the following tasks:
 - Runs unit tests
 - Publishes test result
 - Pushes containers to the registry tagged with the PR number or release version
@@ -213,11 +217,11 @@ The [azure-pipelines.yaml](azure-pipelines.yaml) performs the following tasks:
 
 Builds will be deployed into a namespace with the format `ffc-demo-{identifier}` where `{identifier}` is either the release version, the PR number, or the branch name.
 
-The builds will be available at the URL `http://ffc-demo-{identifier}.{ingress-server}`, where `{ingress-server}` is the ingress server defined the [`values.yaml`](./helm/ffc-demo-web/values.yaml),  which is `vividcloudsolutions.co.uk` by default.
+The builds will be available at the URL `http://ffc-demo-{identifier}.{ingress-server}`, where `{ingress-server}` is r defined the [`values.yaml`](./helm/ffc-demo-web/values.yaml) at `ingress.server`. This is empty by default and is set during the build pipeline.
 
-The temporary deployment requires a CNAME subdomain wildcard pointing to the public IP address of the ingress controller of the Kubernetes cluster. This can be simulated by updating your local `hosts` file with an entry for the build address set to the ingress controller's public IP address. On windows this would mean adding a line to `C:\Windows\System32\drivers\etc\hosts`, i.e. for PR 8 against the default ingress server this would be
+The temporary deployment requires a CNAME subdomain wildcard pointing to the public IP address of the ingress controller of the Kubernetes cluster. This can be simulated by updating your local `hosts` file with an entry for the build address set to the ingress controller's public IP address. On windows this would mean adding a line to `C:\Windows\System32\drivers\etc\hosts`, i.e. for PR 8 against the default ingress server this could be
 
-xx.xx.xx.xx mine-support-pr8.vividcloudsolutions.co.uk
+xx.xx.xx.xx ffc-demo-pr8.my-ingress-server.co.uk
 
 where `xx.xx.xx.xx` is the public IP Address of the Ingress Controller.
 
