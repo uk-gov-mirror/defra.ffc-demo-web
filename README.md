@@ -2,7 +2,7 @@
 
 # FFC Demo Service
 
-Digital service mock to claim public money in the event property subsides into mine shaft.  This is the web front end for the application.  It contains a simple claim submission journey where user input data is cached in Redis.  On submission the data is pulled from Redis and passed to the API gateway.
+Digital service mock to claim public money in the event property subsides into mine shaft.  This is the web front end for the application.  It contains a simple claim submission journey where user input data is cached in Redis.  On submission the data is pulled from Redis and passed to the message service.
 
 ## Prerequisites
 
@@ -32,10 +32,17 @@ The following environment variables are required by the application container. V
 | REDIS_HOSTNAME                        | Redis host                 | no       | localhost             |                             |
 | REDIS_PORT                            | Redis port                 | no       | 6379                  |                             |
 | COOKIE_PASSWORD                       | Redis cookie password      | yes      |                       |                             |
-| API_GATEWAY                           | Url of service API Gateway | no       | http://localhost:3001 |                             |
 | SESSION_TIMEOUT_IN_MINUTES            | Redis session timeout      | no       | 30                    |                             |
 | STATIC_CACHE_TIMEOUT_IN_MILLIS        | static file cache timeout  | no       | 54000 (15 minutes)    |                             |
 | REST_CLIENT_TIMEOUT_IN_MILLIS         | Rest client timout         | no       | 5000                  |                             |
+| DEV_ACCESS_KEY_ID                | Local dev only access key Id   | no       |           |                             |                                   |
+| DEV_ACCESS_KEY                   | Local dev only access key Id   | no       |           |                             |                                   |
+| CLAIM_QUEUE_NAME                 | Message queue name             | yes      |           |                             |                                   |
+| CLAIM_ENDPOINT                   | Message base url               | yes      |           |                             |                                   |
+| CLAIM_QUEUE_URL                  | Message queue url              | no       |           |                             |                                   |
+| CLAIM_QUEUE_REGION               | AWS region                     | no       | eu-west-2 |                             | Ignored in local dev              |
+| CREATE_CLAIM_QUEUE               | Create queue before connection | no       | false     |                             | For local development set to true |
+
 
 ## Building the project locally
 
