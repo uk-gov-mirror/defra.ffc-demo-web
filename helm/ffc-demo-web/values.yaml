@@ -7,7 +7,15 @@ workstream: ffc-demo
 labels:
   component: web
 
-okta: {}
+containerConfigMap:
+  name: ffc-demo-web-config-map
+
+containerSecret:
+  name: ffc-demo-web-container-secret
+  type: Opaque
+
+okta:
+  clientSecret: secret
 
 service:
   port: 80
