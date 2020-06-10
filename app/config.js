@@ -8,6 +8,7 @@ const schema = Joi.object({
   cacheName: Joi.string(),
   redisHost: Joi.string().default('localhost'),
   redisPort: Joi.number().default(6379),
+  redisPassword: Joi.string().default(''),
   redisPartition: Joi.string().default('ffc-demo'),
   cookiePassword: Joi.string().required(),
   sessionTimeoutMinutes: Joi.number().default(30),
@@ -24,6 +25,7 @@ const config = {
   redisPartition: process.env.REDIS_PARTITION,
   redisHost: process.env.REDIS_HOSTNAME,
   redisPort: process.env.REDIS_PORT,
+  redisPassword: process.env.REDIS_PASSWORD,
   cookiePassword: process.env.COOKIE_PASSWORD,
   oktaEnabled: process.env.OKTA_ENABLED,
   sessionTimeoutMinutes: process.env.SESSION_TIMEOUT_IN_MINUTES,
@@ -51,4 +53,13 @@ value.isProd = value.env === 'production'
 if (value.oktaEnabled) {
   value.okta = getOktaConfig()
 }
+
+value.catboxOptions = {
+  host: value.redisHost,
+  port: value.redisPort,
+  password: value.redisPassword,
+  tls: value.isProd ? {} : undefined,
+  partition: value.redisPartition
+}
+
 module.exports = value
