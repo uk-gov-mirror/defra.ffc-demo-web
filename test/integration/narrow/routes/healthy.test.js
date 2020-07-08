@@ -1,10 +1,10 @@
-describe('Accessible test', () => {
+describe('Healthy test', () => {
   let createServer
   let server
 
   beforeAll(async () => {
-    jest.mock('../../../app/services/message-service')
-    createServer = require('../../../app/server')
+    jest.mock('../../../../app/services/message-service')
+    createServer = require('../../../../app/server')
   })
 
   beforeEach(async () => {
@@ -12,10 +12,10 @@ describe('Accessible test', () => {
     await server.initialize()
   })
 
-  test('GET /claim/accessible route returns 200', async () => {
+  test('GET /healthy route returns 200', async () => {
     const options = {
       method: 'GET',
-      url: '/claim/accessible'
+      url: '/healthy'
     }
 
     const response = await server.inject(options)

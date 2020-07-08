@@ -1,10 +1,10 @@
-describe('Date of Subsidence test', () => {
+describe('MineType test', () => {
   let createServer
   let server
 
   beforeAll(async () => {
-    jest.mock('../../../app/services/message-service')
-    createServer = require('../../../app/server')
+    jest.mock('../../../../../app/services/message-service')
+    createServer = require('../../../../../app/server')
   })
 
   beforeEach(async () => {
@@ -12,10 +12,10 @@ describe('Date of Subsidence test', () => {
     await server.initialize()
   })
 
-  test('GET /claim/date-of-subsidence route returns 200', async () => {
+  test('GET /claim/mine-type route returns 200', async () => {
     const options = {
       method: 'GET',
-      url: '/claim/date-of-subsidence'
+      url: '/claim/mine-type'
     }
 
     const response = await server.inject(options)
