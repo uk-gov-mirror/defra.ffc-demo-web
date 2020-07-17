@@ -6,8 +6,6 @@ services:
       context: .
       target: production
     image: ffc-demo-web
-    depends_on:
-      - ffc-demo-claim-message-queue
     environment:
       APPINSIGHTS_CLOUDROLE: ffc-demo-web-local
       APPINSIGHTS_INSTRUMENTATIONKEY:
@@ -19,14 +17,7 @@ services:
       OKTA_CLIENT_SECRET: ${OKTA_CLIENT_SECRET}
       OKTA_AUTH_SERVER_ID: ${OKTA_AUTH_SERVER_ID}
       SITE_URL: http://localhost:3000
-      MESSAGE_QUEUE_HOST : ffc-demo-claim-message-queue
-      MESSAGE_QUEUE_PORT : 5672
-      CLAIM_QUEUE_ADDRESS : claim
-      CLAIM_QUEUE_USER : artemis
-      CLAIM_QUEUE_PASSWORD : artemis
-
-  ffc-demo-claim-message-queue:
-    image: vromero/activemq-artemis:2.9.0-alpine
-    environment:
-      ARTEMIS_USERNAME: artemis
-      ARTEMIS_PASSWORD: artemis
+      MESSAGE_QUEUE_HOST: ${MESSAGE_QUEUE_HOST:-notset}
+      CLAIM_QUEUE_ADDRESS: ffc-demo-claim-${MESSAGE_QUEUE_SUFFIX}
+      CLAIM_QUEUE_USER: ${MESSAGE_QUEUE_USER:-notset}
+      CLAIM_QUEUE_PASSWORD: ${MESSAGE_QUEUE_PASSWORD:-notset}

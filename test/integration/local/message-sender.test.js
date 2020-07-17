@@ -1,20 +1,23 @@
 const MessageSender = require('../../../app/services/messaging/message-sender')
-
 const config = require('../../../app/config')
-
-let messageSender
-const address = 'test-send'
-const message = { greeting: 'test message' }
+const { claimQueueConfig } = require('../../../app/mq-config')
+const asbHelper = require('../../asb-helper')
 
 describe('message sender', () => {
-  afterEach(async () => {
+  let messageSender
+  beforeAll(async () => {
+    await asbHelper.clearQueue(claimQueueConfig)
+    messageSender = new MessageSender('test-sender', config.claimQueueConfig)
+  }, 10000)
+
+  afterAll(async () => {
     await messageSender.closeConnection()
-  })
+    await asbHelper.clearQueue(claimQueueConfig)
+  }, 10000)
+
   test('can send a message', async () => {
-    const testConfig = { ...config.claimQueueConfig, address }
-    messageSender = new MessageSender('test-sender', testConfig)
-    await messageSender.openConnection()
-    const delivery = await messageSender.sendMessage(message)
-    expect(delivery.settled).toBeTruthy()
+    const message = { greeting: 'test message' }
+
+    await messageSender.sendMessage(message)
   })
 })

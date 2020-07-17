@@ -1,7 +1,7 @@
 {
   "name": "ffc-demo-web",
   "description": "Digital service mock to claim public money in the event property subsides into mine shaft.",
-  "version": "4.6.3",
+  "version": "4.7.0",
   "homepage": "https://github.com/DEFRA/ffc-demo-web",
   "repository": {
     "type": "git",
@@ -30,10 +30,12 @@
     "David Bingham david.bingham@defra.gov.uk",
     "Paul Andrews paul.andrews@defra.gov.uk",
     "Fay Toward fay.toward@rpa.gov.uk",
-    "Neil McLaughlin neil.mclaughlin@defra.gov.uk"
+    "Neil McLaughlin neil.mclaughlin@defra.gov.uk",
+    "Steve Hunt steven.hunt@defra.gov.uk"
   ],
   "license": "OGL-UK-3.0",
   "dependencies": {
+    "@azure/service-bus": "^1.1.8",
     "@hapi/bell": "^12.0.0",
     "@hapi/catbox-redis": "^5.0.5",
     "@hapi/cookie": "^11.0.1",
@@ -47,8 +49,7 @@
     "applicationinsights": "^1.8.0",
     "govuk-frontend": "^3.2.0",
     "moment": "^2.24.0",
-    "nunjucks": "^3.2.0",
-    "rhea-promise": "^1.0.0"
+    "nunjucks": "^3.2.0"
   },
   "devDependencies": {
     "@hapi/catbox-memory": "^5.0.0",
