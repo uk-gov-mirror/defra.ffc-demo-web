@@ -10,6 +10,10 @@ labels:
 appInsights:
   key:
 
+azureIdentity:
+  clientID: not-a-real-clientID
+  resourceID: not-a-real-resourceID
+
 containerConfigMap:
   name: ffc-demo-web-config-map
 
@@ -50,8 +54,6 @@ container:
   siteUrl:
   messageQueueHost: amq
   claimQueueAddress: claim
-  claimQueueUser: artemis
-  claimQueuePassword: artemis
 
 ingress:
   class: nginx
