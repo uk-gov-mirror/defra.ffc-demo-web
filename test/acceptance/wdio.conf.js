@@ -1,7 +1,7 @@
 const { ReportAggregator, HtmlReporter } = require('@rpii/wdio-html-reporter')
 const log4js = require('@log4js-node/log4js-api')
 const logger = log4js.getLogger('default')
-const envRoot = (process.env.TEST_ENVIRONMENT_ROOT_URL || 'https://ffc-demo.ffc-dev.azure.defra.cloud')
+const envRoot = (process.env.TEST_ENVIRONMENT_ROOT_URL || 'http://host.docker.internal:3000')
 
 exports.config = {
   hostname: 'selenium',
@@ -21,7 +21,7 @@ exports.config = {
   // Test Configurations
   // ===================
   // Define all options that are relevant for the WebdriverIO instance here
-  logLevel: 'info',
+  logLevel: 'warn',
   bail: 0,
   baseUrl: envRoot + '/selenium:4444',
   waitforTimeout: 10000,
@@ -31,7 +31,7 @@ exports.config = {
   framework: 'cucumber',
   reporters: ['spec',
     [HtmlReporter, {
-      debug: true,
+      debug: false,
       outputDir: './html-reports/',
       filename: 'feature-report.html',
       reportTitle: 'Feature Test Report',
@@ -90,16 +90,18 @@ exports.config = {
     global.should = chai.should()
   },
 
-  afterTest: function (test) {
+  afterStep: function (featureName, feature, result, ctx) {
+    if (result.passed) {
+      return
+    }
+
     const path = require('path')
     const moment = require('moment')
 
-    // if test passed, ignore, else take and save screenshot.
-    if (test.passed) {
-      return
-    }
+    const screenshotFileName = ctx.uri.split('.feature')[0].split('/').slice(-1)[0]
     const timestamp = moment().format('YYYYMMDD-HHmmss.SSS')
-    const filepath = path.join('/html-reports/screenshots/', timestamp + '.png')
+    const filepath = path.join('./html-reports/screenshots/', screenshotFileName + '-' + timestamp + '.png')
+
     browser.saveScreenshot(filepath)
     process.emit('test:screenshot', filepath)
   }

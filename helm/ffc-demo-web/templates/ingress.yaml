@@ -1,8 +1,5 @@
-{{- if not .Values.ingress.alb }}
-{{- include "ffc-helm-library.ingress" (list . "ffc-demo-web.ingress") -}}
-{{- end }}
+{{- include "ffc-helm-library.azure-ingress" (list . "ffc-demo-web.ingress") -}}
 {{- define "ffc-demo-web.ingress" -}}
-{{- if not .Values.ingress.alb }}
 metadata:
   annotations:
     {{- if .Values.secret.auth }}
@@ -20,5 +17,4 @@ metadata:
       proxy_hide_header l5d-remote-ip;
       proxy_hide_header l5d-server-id;
     {{- end }}
-{{- end }}
 {{- end -}}
