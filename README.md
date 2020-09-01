@@ -36,12 +36,12 @@ for
 and
 [azure-identity-binding](./helm/ffc-demo-claim-service/templates/azure-identity-binding.yaml).
 
-| Name                               | Description                                                                                  |
-| ---------------------------------- | -------------------------------------------------------------------------------------------- |
-| MESSAGE_QUEUE_HOST                 | Azure Service Bus hostname, e.g. `myservicebus.servicebus.windows.net`                       |
-| MESSAGE_QUEUE_PASSWORD             | Azure Service Bus SAS policy key                                                             |
-| MESSAGE_QUEUE_SUFFIX               | Developer specific queue suffix to prevent collisions, only required for local development   |
-| MESSAGE_QUEUE_USER                 | Azure Service Bus SAS policy name, e.g. `RootManageSharedAccessKey`                          |
+| Name                   | Description                                                                                |
+| ----                   | -----------                                                                                |
+| MESSAGE_QUEUE_HOST     | Azure Service Bus hostname, e.g. `myservicebus.servicebus.windows.net`                     |
+| MESSAGE_QUEUE_PASSWORD | Azure Service Bus SAS policy key                                                           |
+| MESSAGE_QUEUE_SUFFIX   | Developer specific queue suffix to prevent collisions, only required for local development |
+| MESSAGE_QUEUE_USER     | Azure Service Bus SAS policy name, e.g. `RootManageSharedAccessKey`                        |
 
 ## Environment variables
 
@@ -145,6 +145,13 @@ development, it may not be obvious why `docker-compose.test.yaml` exists. It's
 main purpose is for CI pipelines, where tests need to run in a container
 without any ports forwarded from the host machine.
 
+### Running ZAP scan
+
+A docker-compose exists for running a
+[ZAP Baseline Scan](https://www.zaproxy.org/docs/docker/baseline-scan/).
+Primarily this will be run during CI. It can also be run locally via the
+[zap](./scripts/zap) script.
+
 ## Running the application
 
 The application is designed to run in containerised environments, using Docker
@@ -192,7 +199,8 @@ docker-compose -f docker-compose.yaml -f docker-compose.override.yaml -f docker-
 This service posts messages to an ASB message queue. Manual testing
 involves creating claims using the web UI and inspecting the appropriate
 message queue. The service can be started by running
-`docker-compose up --build` whilst having the
+`docker-compose up --build` whilst having set the required
+[environment variables](#azure-service-bus) for the ASB to be connected to.
 
 The messages can be inspected with a tool such as
 [Service Bus Explorer](https://github.com/paolosalvatori/ServiceBusExplorer) or
@@ -301,7 +309,7 @@ The details of what is done during CI are best left to reviewing the
 the following happens:
 - The application is validated
 - The application is tested
-- The application is built into deployed artifacts
+- The application is built into deployable artifacts
 - Those artifacts are deployed
 
 A detailed description on the build pipeline and PR work flow is available in
