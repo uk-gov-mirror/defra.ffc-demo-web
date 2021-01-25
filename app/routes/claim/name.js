@@ -3,7 +3,7 @@ const sessionHandler = require('../../services/session-handler')
 module.exports = [
   {
     method: ['GET', 'POST'],
-    path: '/claim/property-type',
+    path: '/claim/name',
     handler: {
       'hapi-govuk-question-page': {
         getConfig: () => {
@@ -12,8 +12,8 @@ module.exports = [
           }
         },
         getData: (request) => sessionHandler.get(request, 'claim'),
-        getNextPath: () => './accessible',
-        pageDefinition: require('./page-definitions/property-type')
+        getNextPath: () => './property-type',
+        pageDefinition: require('./page-definitions/name')
       }
     },
     options: require('./question-page-options')
