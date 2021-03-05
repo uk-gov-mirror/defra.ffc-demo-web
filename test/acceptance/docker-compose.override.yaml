@@ -1,6 +1,9 @@
 version: "3.7"
 services:
   wdio-cucumber:
+    ports:
+      - "9230:9229"
+    command: npx wdio wdio.conf.js --watch
     volumes:
       - ./:/home/node/src
       - ./babel.config.js:/home/node/babel.config.js

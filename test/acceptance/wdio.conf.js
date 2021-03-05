@@ -8,7 +8,7 @@ exports.config = {
   path: '/wd/hub',
   specs: ['./features/**/*.feature'],
   exclude: ['./scratch/**'],
-  maxInstances: 10,
+  maxInstances: 1,
   capabilities: [{
     maxInstances: 5,
     browserName: 'chrome',
