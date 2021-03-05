@@ -1,15 +1,18 @@
 version: "3.7"
 services:
   wdio-cucumber:
-    ports:
-      - "9230:9229"
-    command: npx wdio wdio.conf.js --watch
+    environment:
+      CHROME_DEBUG_MODE: "true"
     volumes:
       - ./:/home/node/src
       - ./babel.config.js:/home/node/babel.config.js
       - ./wdio.conf.js:/home/node/wdio.conf.js
       - ./wdio.BUILD.conf.js:/home/node/wdio.BUILD.conf.js
       - ./html-reports/:/home/node/html-reports/
+
+  selenium:
+    ports:
+      - "9001:5900"
 
   hub:
     ports:
