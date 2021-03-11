@@ -11,4 +11,4 @@ RUN npm install
 # Bundle app source setting node user as owner
 COPY --chown=node:node . .
 
-CMD npx wdio wdio.conf.js
+CMD npm run test:features

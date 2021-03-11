@@ -5,7 +5,6 @@ services:
       - ./:/home/node/src
       - ./babel.config.js:/home/node/babel.config.js
       - ./wdio.conf.js:/home/node/wdio.conf.js
-      - ./wdio.BUILD.conf.js:/home/node/wdio.BUILD.conf.js
       - ./html-reports/:/home/node/html-reports/
 
   hub:
