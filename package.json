@@ -56,6 +56,7 @@
     "@hapi/good": "^9.0.0",
     "@hapi/good-console": "^9.0.0",
     "@hapi/good-squeeze": "^6.0.0",
+    "@pact-foundation/pact": "^9.11.1",
     "blipp": "^4.0.1",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^4.2.1",
@@ -73,8 +74,7 @@
     "standard": "^14.3.4",
     "style-loader": "^1.2.1",
     "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12",
-    "@pact-foundation/pact": "^9.11.1"
+    "webpack-cli": "^3.3.12"
   },
   "nodemonConfig": {
     "ignore": [
