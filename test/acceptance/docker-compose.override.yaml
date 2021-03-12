@@ -2,13 +2,28 @@ version: "3.7"
 services:
   wdio-cucumber:
     environment:
+<<<<<<< HEAD
       CHROME_DEBUG_MODE: "true"
+=======
+      MAX_INSTANCES: 1
+      CHROME_ARGS: "--verbose"
+>>>>>>> fix-assets
     volumes:
-      - ./:/home/node/src
+      - ./features/:/home/node/features/
+      - ./pageobjects/:/home/node/pageobjects/
+      - ./scratch/:/home/node/scratch/
+      - ./steps/:/home/node/steps/
+      - ./support/:/home/node/support/
       - ./babel.config.js:/home/node/babel.config.js
-      - ./wdio.conf.js:/home/node/wdio.conf.js
-      - ./wdio.BUILD.conf.js:/home/node/wdio.BUILD.conf.js
+      - ./wdio.conf:/home/node/wdio.conf
+      - ./package.json:/home/node/package.json
       - ./html-reports/:/home/node/html-reports/
+    ports:
+      - "9228:9229"
+
+  selenium:
+    ports:
+      - "9001:5900"
 
   selenium:
     ports:
