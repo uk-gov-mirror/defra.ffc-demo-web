@@ -2,12 +2,8 @@ version: "3.7"
 services:
   wdio-cucumber:
     environment:
-<<<<<<< HEAD
-      CHROME_DEBUG_MODE: "true"
-=======
       MAX_INSTANCES: 1
       CHROME_ARGS: "--verbose"
->>>>>>> fix-assets
     volumes:
       - ./features/:/home/node/features/
       - ./pageobjects/:/home/node/pageobjects/

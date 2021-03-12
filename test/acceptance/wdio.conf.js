@@ -2,27 +2,17 @@ const { ReportAggregator, HtmlReporter } = require('@rpii/wdio-html-reporter')
 const log4js = require('@log4js-node/log4js-api')
 const logger = log4js.getLogger('default')
 const envRoot = (process.env.TEST_ENVIRONMENT_ROOT_URL || 'http://host.docker.internal:3000')
-<<<<<<< HEAD
-const chromeArgs = process.env.CHROME_DEBUG_MODE ? [] : ['--headless', '--ignore-certificate-errors']
-=======
 const chromeArgs = process.env.CHROME_ARGS.split(' ')
 const maxInstances = process.env.MAX_INSTANCES ? Number(process.env.MAX_INSTANCES) : 5
->>>>>>> fix-assets
 
 exports.config = {
   hostname: 'selenium',
   path: '/wd/hub',
   specs: ['./features/**/*.feature'],
   exclude: ['./scratch/**'],
-<<<<<<< HEAD
-  maxInstances: 1,
-  capabilities: [{
-    maxInstances: 1,
-=======
   maxInstances,
   capabilities: [{
     maxInstances,
->>>>>>> fix-assets
     browserName: 'chrome',
     acceptInsecureCerts: false,
     'goog:chromeOptions': {
