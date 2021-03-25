@@ -24,7 +24,6 @@ import setWindowSize from '../support/action/setWindowSize'
 Given(
   /^I open the (url|site) "([^"]*)?"$/,
   openWebsite
-  
 )
 
 Given(

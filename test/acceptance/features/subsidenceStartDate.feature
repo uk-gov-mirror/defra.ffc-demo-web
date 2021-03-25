@@ -13,3 +13,4 @@ Feature: Date of Subsidence Page checks
         And I add "1970" to the inputfield "#dateOfSubsidence__year"
         And I click on the button "#submit"
         Then I expect that the url contains "/claim/mine-type"
+
