@@ -18,7 +18,7 @@ exports.config = {
     'goog:chromeOptions': {
       args: chromeArgs
     }
-  }],  
+  }],
   //
   // ===================
   // Test Configurations
