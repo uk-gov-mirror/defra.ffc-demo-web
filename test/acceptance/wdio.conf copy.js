@@ -1,4 +1,3 @@
-var browserstack = require('browserstack-local')
 const { ReportAggregator, HtmlReporter } = require('@rpii/wdio-html-reporter')
 const log4js = require('@log4js-node/log4js-api')
 const logger = log4js.getLogger('default')
@@ -7,9 +6,6 @@ const chromeArgs = process.env.CHROME_ARGS ? process.env.CHROME_ARGS.split(' ') 
 const maxInstances = process.env.MAX_INSTANCES ? Number(process.env.MAX_INSTANCES) : 5
 
 exports.config = {
-
-  user: process.env.BROWSERSTACK_USERNAME || 'kaziyiola2',
-  key: process.env.BROWSERSTACK_ACCESS_KEY || '9wMS2xKkzpvkwsrcs9Vt',
   hostname: 'selenium',
   path: '/wd/hub',
   specs: ['./features/**/*.feature'],
@@ -19,7 +15,6 @@ exports.config = {
     maxInstances,
     acceptInsecureCerts: true,
     browserName: 'chrome',
-    'browserstack.local': true,
     'goog:chromeOptions': {
       args: chromeArgs
     }
@@ -35,8 +30,7 @@ exports.config = {
   waitforTimeout: 10000,
   connectionRetryTimeout: 90000,
   connectionRetryCount: 3,
-  // services: ['selenium-standalone'],
-  services: ['browserstack'],
+  services: ['selenium-standalone'],
   framework: 'cucumber',
   specFileRetries: 3,
   specFileRetriesDelay: 30,
@@ -81,45 +75,15 @@ exports.config = {
       browserName: capabilities.browserName
       // to use the template override option, can point to your own file in the test project:
       // templateFilename: path.resolve(__dirname, '../template/wdio-html-reporter-alt-template.hbs')
-
     })
     reportAggregator.clean()
     global.reportAggregator = reportAggregator
-
-    // starting  browser stack
-    console.log(process.env.BROWSERSTACK_ACCESS_KEY)
-    console.log('Connecting local')
-    return new Promise(function (resolve, reject) {
-      exports.bs_local = new browserstack.Local()
-      exports.bs_local.start({ 'key': exports.config.key }, function (error) {
-        if (error) return reject(error)
-
-        console.log('Connected. Now testing...')
-        resolve()
-      })
-    }) // end of starting browser stack
-  },
-
-  // Code to mark the status of test on BrowserStack based on the assertion status
-  afterTest: function (test, context, { error, result, duration, passed, retries }) {
-    if (passed) {
-      browser.executeScript('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"passed","reason": "Assertions passed"}}')
-    } else {
-      browser.executeScript('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed","reason": "At least 1 assertion failed"}}')
-    }
   },
 
   onComplete: function (exitCode, config, capabilities, results) {
     (async () => {
       await global.reportAggregator.createReport()
     })()
-    // stop browser test
-    return new Promise(function (resolve, reject) {
-      exports.bs_local.stop(function () {
-        console.log('Binary stopped')
-        resolve()
-      })
-    })
   },
 
   beforeSession: function () {
