@@ -72,7 +72,6 @@ exports.config = {
 
   // =====
   // Hooks
-
   // =====
   onPrepare: function (config, capabilities) {
     const reportAggregator = new ReportAggregator({
@@ -86,6 +85,7 @@ exports.config = {
     })
     reportAggregator.clean()
     global.reportAggregator = reportAggregator
+
     // starting  browser stack
     console.log(process.env.BROWSERSTACK_ACCESS_KEY)
     console.log('Connecting local')
@@ -100,16 +100,14 @@ exports.config = {
     }) // end of starting browser stack
   },
 
-  // end of starting browser stack
-
   // Code to mark the status of test on BrowserStack based on the assertion status
-  //   afterTest: function (test, context, { error, result, duration, passed, retries }) {
-  //     if (passed) {
-  //       browser.executeScript('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"passed","reason": "Assertions passed"}}')
-  //     } else {
-  //       browser.executeScript('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed","reason": "At least 1 assertion failed"}}')
-  //     }
-  //   },
+  afterTest: function (test, context, { error, result, duration, passed, retries }) {
+    if (passed) {
+      browser.executeScript('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"passed","reason": "Assertions passed"}}')
+    } else {
+      browser.executeScript('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed","reason": "At least 1 assertion failed"}}')
+    }
+  },
 
   onComplete: function (exitCode, config, capabilities, results) {
     (async () => {
