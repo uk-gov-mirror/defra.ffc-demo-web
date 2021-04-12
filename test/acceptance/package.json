@@ -20,7 +20,7 @@
   ],
   "scripts": {
     "test": "wdio wdio.conf.js",
-    "test:debug": "node --inspect-brk=0.0.0.0 ./node_modules/@wdio/cli/bin/wdio.js wdio.conf.js"
+     "test:debug": "node --inspect-brk=0.0.0.0 ./node_modules/@wdio/cli/bin/wdio.js wdio.conf.js"
   },
   "dependencies": {
     "@babel/cli": "^7.2.3",
@@ -40,7 +40,8 @@
     "selenium-standalone": "^6.17.0",
     "wdio-geckodriver-service": "^1.0.0",
     "webdriverio": "^6.1.19",
-    "ws": "^7.2.0"
+    "ws": "^7.2.0",
+    "cross-env": "^5.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
