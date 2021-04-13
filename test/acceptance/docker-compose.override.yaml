@@ -30,9 +30,9 @@ services:
     ports:
       - "4444:4444"
 
-  browserstack:
-    ports:
-      - "45454:45454"
+  # browserstack:
+  #   ports:
+  #     - "45454:45454"
    
 
   

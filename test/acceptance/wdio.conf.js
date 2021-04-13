@@ -9,17 +9,14 @@ const logger = log4js.getLogger('default')
 const envRoot = (process.env.TEST_ENVIRONMENT_ROOT_URL || 'http://host.docker.internal:3000')
 const chromeArgs = process.env.CHROME_ARGS ? process.env.CHROME_ARGS.split(' ') : []
 const maxInstances = process.env.MAX_INSTANCES ? Number(process.env.MAX_INSTANCES) : 5
+const key = process.env.BROWSERSTACK_ACCESS_KEY
 
 exports.config = {
-  // hostname: 'selenium',  //
-  // hostname: 'hub-cloud.browserstack.com',
-  // path: '/wd/hub',
-  user: process.env.BROWSERSTACK_USERNAME,
-  key: process.env.BROWSERSTACK_ACCESS_KEY,
-
+  hostname: 'selenium',
+  path: '/wd/hub',
+  // key,
   specs: ['./features/**/*.feature'],
   exclude: ['./scratch/**'],
-
   // capabilities: compatibility.map(e => {
   //   e.project = 'ffc-demo-web'
   //   e.build = 'ffc-demo-web'
@@ -39,9 +36,9 @@ exports.config = {
     maxInstances,
     acceptInsecureCerts: true,
     browserName: 'chrome',
-    'browserstack.local': true,
-    'browserstack.networkLogs': true,
-    'browserstack.acceptSslCerts': true,
+    // 'browserstack.local': true,
+    // 'browserstack.networkLogs': true,
+    // 'browserstack.acceptSslCerts': true,
     'goog:chromeOptions': {
       args: chromeArgs
     }
@@ -75,7 +72,7 @@ exports.config = {
   // services: ['selenium-standalone'],
   services: ['browserstack'],
   framework: 'cucumber',
-  specFileRetries: 3,
+  specFileRetries: 0,
   specFileRetriesDelay: 30,
   reporters: ['spec',
     [HtmlReporter, {
@@ -128,11 +125,11 @@ exports.config = {
     return new Promise(function (resolve, reject) {
       exports.bs_local = new browserstack.Local()
       const bsLocalArgs = {
-        key: exports.config.key,
+        key,
         verbose: 'true',
-        force: 'true',
-        onlyAutomate: 'true',
-        forceLocal: 'true'
+        // force: 'true',
+        onlyAutomate: 'true'
+        // forceLocal: 'true'
       }
       exports.bs_local.start(bsLocalArgs, function (error) {
         if (error) return reject(error)

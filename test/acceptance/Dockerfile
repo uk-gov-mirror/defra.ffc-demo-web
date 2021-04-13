@@ -7,9 +7,6 @@ ARG PARENT_VERSION
 LABEL uk.gov.defra.ffc.parent-image=defradigital/node-development:${PARENT_VERSION}
 ARG PORT_DEBUG
 EXPOSE ${PORT_DEBUG}
-USER root
-RUN apk add --no-cache libstdc++ procps
-USER node
 COPY --chown=node:node package*.json ./
 RUN npm install
 COPY --chown=node:node . .
