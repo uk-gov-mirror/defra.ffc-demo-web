@@ -7,10 +7,10 @@ services:
     depends_on:
       - selenium
       - hub
-      # - browserstack
     environment:
       TEST_ENVIRONMENT_ROOT_URL: ${TEST_ENVIRONMENT_ROOT_URL}
       CHROME_ARGS: "--headless --ignore-certificate-errors"
+      BROWSERSTACK_USERNAME: ${BROWSERSTACK_USERNAME}
       BROWSERSTACK_ACCESS_KEY: ${BROWSERSTACK_ACCESS_KEY}
 
   selenium:
@@ -20,9 +20,3 @@ services:
   hub:
     image: selenium/hub
     container_name: selenium-hub
-
-  # browserstack:
-  #   image: browserstack/local
-  #   container_name: browserstack-local
-  #   command: --key ${BROWSERSTACK_ACCESS_KEY}
-      

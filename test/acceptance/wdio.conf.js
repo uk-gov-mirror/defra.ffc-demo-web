@@ -9,12 +9,14 @@ const logger = log4js.getLogger('default')
 const envRoot = (process.env.TEST_ENVIRONMENT_ROOT_URL || 'http://host.docker.internal:3000')
 const chromeArgs = process.env.CHROME_ARGS ? process.env.CHROME_ARGS.split(' ') : []
 const maxInstances = process.env.MAX_INSTANCES ? Number(process.env.MAX_INSTANCES) : 5
+const user = process.env.BROWSERSTACK_USERNAME
 const key = process.env.BROWSERSTACK_ACCESS_KEY
 
 exports.config = {
-  hostname: 'selenium',
-  path: '/wd/hub',
-  // key,
+  hostname: 'hub-cloud.browserstack.com',
+  // path: '/wd/hub',
+  user,
+  key,
   specs: ['./features/**/*.feature'],
   exclude: ['./scratch/**'],
   // capabilities: compatibility.map(e => {
@@ -36,7 +38,7 @@ exports.config = {
     maxInstances,
     acceptInsecureCerts: true,
     browserName: 'chrome',
-    // 'browserstack.local': true,
+    'browserstack.local': true,
     // 'browserstack.networkLogs': true,
     // 'browserstack.acceptSslCerts': true,
     'goog:chromeOptions': {
@@ -48,14 +50,16 @@ exports.config = {
     os: 'Windows',
     osVersion: '10',
     browserName: 'Firefox',
-    browserVersion: 'latest'
+    browserVersion: 'latest',
+    'browserstack.local': true
   },
   {
     // MacOS Mojave Safari 13.1
     os: 'OS X',
     osVersion: 'Catalina',
     browserName: 'Safari',
-    browserVersion: 'latest'
+    browserVersion: 'latest',
+    'browserstack.local': true
   } ],
   //
   // ===================
