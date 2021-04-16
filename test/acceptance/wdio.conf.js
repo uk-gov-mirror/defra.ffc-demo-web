@@ -14,53 +14,51 @@ const key = process.env.BROWSERSTACK_ACCESS_KEY
 
 exports.config = {
   hostname: 'hub-cloud.browserstack.com',
-  // path: '/wd/hub',
   user,
   key,
   specs: ['./features/**/*.feature'],
   exclude: ['./scratch/**'],
-  // capabilities: compatibility.map(e => {
-  //   e.project = 'ffc-demo-web'
-  //   e.build = 'ffc-demo-web'
-  //   e.name = `Kaz iyiola@ ${timestamp}`
-  //   e['browserstack.local'] = true
-  //   e['browserstack.debug'] = true
-  //   e['browserstack.networkLogs'] = true
-  //   e['browserstack.acceptSslCerts'] = true
-  //   e['browserstack.console'] = 'errors'
-  //   e['browserstack.use_w3c'] = true
-  //   e['browserstack.selenium_version'] = '3.141.59'
-  //   return e
-  // }),
 
   maxInstances,
-  capabilities: [{
-    maxInstances,
-    acceptInsecureCerts: true,
-    browserName: 'chrome',
-    'browserstack.local': true,
-    // 'browserstack.networkLogs': true,
-    // 'browserstack.acceptSslCerts': true,
-    'goog:chromeOptions': {
-      args: chromeArgs
-    }
-  },
-  {
+  capabilities: [
+    {
+      maxInstances,
+      acceptInsecureCerts: true,
+      browserName: 'chrome',
+      'browserstack.local': true,
+      'browserstack.networkLogs': true,
+      'browserstack.acceptSslCerts': true,
+      'goog:chromeOptions': {
+        args: chromeArgs
+      }
+    },
+    {
     // Windows 10 Firefox latest
-    os: 'Windows',
-    osVersion: '10',
-    browserName: 'Firefox',
-    browserVersion: 'latest',
-    'browserstack.local': true
-  },
-  {
+      os: 'Windows',
+      osVersion: '10',
+      browserName: 'Firefox',
+      browserVersion: 'latest',
+      'browserstack.local': true
+    },
+    {
     // MacOS Mojave Safari 13.1
-    os: 'OS X',
-    osVersion: 'Catalina',
-    browserName: 'Safari',
-    browserVersion: 'latest',
-    'browserstack.local': true
-  } ],
+      os: 'OS X',
+      osVersion: 'Big Sur',
+      browserName: 'Safari',
+      browserVersion: 'latest',
+      'browserstack.local': true
+    },
+
+    {
+    // Windows IE 11
+      os: 'Windows',
+      osVersion: '10',
+      browserName: 'IE',
+      browserVersion: 'latest',
+      'browserstack.local': true
+    }
+
+  ],
   //
   // ===================
   // Test Configurations
@@ -68,12 +66,10 @@ exports.config = {
   // Define all options that are relevant for the WebdriverIO instance here
   logLevel: 'warn',
   bail: 0,
-  // baseUrl: envRoot + '/selenium:4444',
   baseUrl: envRoot,
   waitforTimeout: 10000,
   connectionRetryTimeout: 90000,
   connectionRetryCount: 3,
-  // services: ['selenium-standalone'],
   services: ['browserstack'],
   framework: 'cucumber',
   specFileRetries: 0,
@@ -131,9 +127,7 @@ exports.config = {
       const bsLocalArgs = {
         key,
         verbose: 'true',
-        // force: 'true',
         onlyAutomate: 'true'
-        // forceLocal: 'true'
       }
       exports.bs_local.start(bsLocalArgs, function (error) {
         if (error) return reject(error)
