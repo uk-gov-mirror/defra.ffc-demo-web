@@ -9,5 +9,3 @@ services:
       CHROME_ARGS: "--headless --ignore-certificate-errors"
       BROWSERSTACK_USERNAME: ${BROWSERSTACK_USERNAME}
       BROWSERSTACK_ACCESS_KEY: ${BROWSERSTACK_ACCESS_KEY}
-
-  

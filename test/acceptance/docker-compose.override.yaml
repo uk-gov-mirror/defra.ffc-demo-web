@@ -17,10 +17,4 @@ services:
     ports:
       - "9228:9229"
 
-  selenium:
-    ports:
-      - "9001:5900"
-
-  hub:
-    ports:
-      - "4444:4444"
+      
