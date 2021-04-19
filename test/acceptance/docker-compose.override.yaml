@@ -14,18 +14,13 @@ services:
       - ./wdio.conf:/home/node/wdio.conf
       - ./package.json:/home/node/package.json
       - ./html-reports/:/home/node/html-reports/
-      
     ports:
       - "9228:9229"
 
-  # selenium:
-  #   ports:
-  #     - "9001:5900"
+  selenium:
+    ports:
+      - "9001:5900"
 
-  # selenium:
-  #   ports:
-  #     - "9001:5900"
-
-  # hub:
-  #   ports:
-  #     - "4444:4444"
+  hub:
+    ports:
+      - "4444:4444"
