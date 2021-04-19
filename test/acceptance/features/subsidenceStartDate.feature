@@ -5,7 +5,7 @@ Feature: Date of Subsidence Page checks
         Given I open the url "/claim/date-of-subsidence"
         And   I pause for 500ms
         Then I expect that the url contains "/claim/date-of-subsidence"
-        Then I expect that the title contains "When did the subsidence start?"
+        # Then I expect that the title contains "When did the subsidence start?"
         
         When I clear the inputfield "#dateOfSubsidence__day"
         And I click on the button "#dateOfSubsidence__day"
