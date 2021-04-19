@@ -34,7 +34,8 @@ exports.config = {
       osVersion: '10',
       browserName: 'Firefox',
       browserVersion: 'latest',
-      'browserstack.local': true
+      'browserstack.local': true,
+      acceptInsecureCerts: true
     },
     {
     // MacOS Mojave Safari 13.1
