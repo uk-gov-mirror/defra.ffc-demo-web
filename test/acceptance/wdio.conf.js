@@ -1,8 +1,4 @@
 var browserstack = require('browserstack-local')
-// var request = require('request')
-// const compatibility = require('./browsers')
-// const moment = require('moment-timezone')
-// const timestamp = moment.tz('Europe/London').format('D/M/YY hh:mm:ss')
 const { ReportAggregator, HtmlReporter } = require('@rpii/wdio-html-reporter')
 const log4js = require('@log4js-node/log4js-api')
 const logger = log4js.getLogger('default')
@@ -45,15 +41,6 @@ exports.config = {
       os: 'OS X',
       osVersion: 'Big Sur',
       browserName: 'Safari',
-      browserVersion: 'latest',
-      'browserstack.local': true
-    },
-
-    {
-    // Windows IE 11
-      os: 'Windows',
-      osVersion: '10',
-      browserName: 'IE',
       browserVersion: 'latest',
       'browserstack.local': true
     }

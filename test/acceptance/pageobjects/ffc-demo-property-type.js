@@ -12,8 +12,9 @@ class PropertyType extends Page {
   // get homeRadioButton () { return $('//*[(@id = "propertyType")]') }
   // //main[@id='main-content']/div/div/form/div/fieldset/div[2]/div[2]/input
 
-  get homeRadioButton () { return $('//main[@id="main-content"]/div/div/form/div/fieldset/div[2]/div[2]/input') }
-  // get homeRadioButton () { return $('//div[2]/input') }
+  get homeRadioButton () { return $('//input') }
+  // get homeRadioButton () { return $('//div[2]/input') } //input
+  // get homeRadioButton () { return $('//main[@id="main-content"]/div/div/form/div/fieldset/div[2]/div[2]/input') }
 
   get businessRadioButton () { return $('//*[(@id = "propertyType-2")]') }
 
@@ -25,10 +26,18 @@ class PropertyType extends Page {
     browser.pause(3000)
   }
 
-  selectHomeRadioBtn () {
-    this.homeRadioButton.click()
-    browser.pause(3000)
+  // selectHomeRadioBtn () {
+  //   // this.claimNameInput.waitForExist()
+  //   (this.homeRadioButton).click()
+  //   // browser.pause(3000)
+  // }
+
+  async selectHomeRadioBtn () {
+    // this.claimNameInput.waitForExist()
+    await (await this.homeRadioButton).click()
+    // browser.pause(3000)
   }
+
   /**
      * your page specific methods
      */
