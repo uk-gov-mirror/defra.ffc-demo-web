@@ -105,8 +105,9 @@ exports.config = {
       filename: 'acceptance-test-suite-report.html',
       reportTitle: 'Acceptance Tests Report',
       browserName: capabilities.browserName
+
       // to use the template override option, can point to your own file in the test project:
-      // templateFilename: path.resolve(__dirname, '../template/wdio-html-reporter-alt-template.hbs')
+      //  templateFilename: path.resolve(__dirname, '../template/wdio-html-reporter-alt-template.hbs')
 
     })
     reportAggregator.clean()
