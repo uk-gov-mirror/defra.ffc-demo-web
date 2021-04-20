@@ -47,6 +47,17 @@ exports.config = {
       'browserstack.local': true,
       acceptInsecureCerts: true,
       acceptSslCerts: true
+    },
+
+    {
+      // Windows IE 11
+      os: 'Windows',
+      osVersion: '10',
+      browserName: 'IE',
+      browserVersion: 'latest',
+      'browserstack.local': true,
+      acceptInsecureCerts: true,
+      acceptSslCerts: true
     }
   ],
   //
