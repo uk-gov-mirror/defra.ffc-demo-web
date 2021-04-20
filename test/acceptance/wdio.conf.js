@@ -44,7 +44,9 @@ exports.config = {
       osVersion: 'Big Sur',
       browserName: 'Safari',
       browserVersion: 'latest',
-      'browserstack.local': true
+      'browserstack.local': true,
+      acceptInsecureCerts: true,
+      acceptSslCerts: true
     }
   ],
   //
