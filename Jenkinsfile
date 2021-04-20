@@ -1,3 +1,3 @@
-@Library('defra-library@psd-1251-browserstack-credentials') _
+@Library('defra-library@psd-1251-browerstack-credentials') _
 
 buildNodeJs defaultBranch: 'master'
