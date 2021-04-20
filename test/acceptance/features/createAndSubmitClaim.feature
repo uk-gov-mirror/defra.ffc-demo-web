@@ -3,7 +3,7 @@ Feature: Create and submit a new claim
     Scenario: Successfully complete form to submit a new claim
 
         Given I open the url "/"
-        # When I click on the button ".js-cookies-button-accept"
+        When I click on the button ".js-cookies-button-accept"
         Then I expect that the title contains "FFC Demo Service - GOV.UK"
         Then I expect that element "h1" contains the text "FFC Demo Service"
         
